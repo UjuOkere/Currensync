@@ -14,6 +14,36 @@
     <p class="tagline">Welcome to <span class="flash">⚡</span>CurrenSync</p>
     <footer class="footer">Created by Uju Okere</footer>
   </div>
+
+  <div class="converter">
+    <h2>Currency Converter</h2>
+    <input type="number" id="amount" placeholder="Enter amount" />
+    
+    <div class="selectors">
+      <select id="fromCurrency">
+        <option value="USD" selected>USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+        <option value="NGN">NGN</option>
+        <option value="JPY">JPY</option>
+        <!-- Add more currencies as needed -->
+      </select>
+
+      <span>to</span>
+
+      <select id="toCurrency">
+        <option value="EUR" selected>EUR</option>
+        <option value="USD">USD</option>
+        <option value="GBP">GBP</option>
+        <option value="NGN">NGN</option>
+        <option value="JPY">JPY</option>
+      </select>
+    </div>
+
+    <button onclick="convertCurrency()">Convert</button>
+    <div id="result"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
