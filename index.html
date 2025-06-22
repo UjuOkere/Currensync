@@ -3,22 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CurrenSync</title>
+  <title>CurrenSync – Global Currency Converter by Uju Okere</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="icon" href="favicon.png" type="image/png">
+  <meta name="description" content="Convert currencies instantly with CurrenSync – fast, accurate, global. Created by Uju Okere.">
+  <meta name="keywords" content="currency converter, CurrenSync, Uju Okere, convert USD to NGN, exchange rate calculator, forex tool">
+  <meta name="author" content="Uju Okere">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="splash-screen">
-    <img src="logo.png" alt="CurrenSync Logo" class="logo"/>
+    <img src="logo.png" alt="CurrenSync logo created by Uju Okere" class="logo"/>
     <h1 class="title">Uju Okere</h1>
     <p class="tagline">Welcome to <span class="flash">⚡</span>CurrenSync</p>
     <footer class="footer">Created by Uju Okere</footer>
   </div>
 
+  <!-- Google AdSense placement (HEADER) -->
+  <!-- Paste your AdSense code snippet here when approved -->
+
   <div class="converter">
-    <h2>Currency Converter</h2>
+    <h2>Instant Currency Converter</h2>
     <input type="number" id="amount" placeholder="Enter amount" />
-    
+
     <div class="selectors">
       <select id="fromCurrency">
         <option value="USD" selected>USD</option>
@@ -26,11 +33,8 @@
         <option value="GBP">GBP</option>
         <option value="NGN">NGN</option>
         <option value="JPY">JPY</option>
-        <!-- Add more currencies as needed -->
       </select>
-
       <span>to</span>
-
       <select id="toCurrency">
         <option value="EUR" selected>EUR</option>
         <option value="USD">USD</option>
@@ -40,9 +44,12 @@
       </select>
     </div>
 
-    <button onclick="convertCurrency()">Convert</button>
+    <button onclick="convertCurrency()" class="glow">Convert Now</button>
     <div id="result"></div>
   </div>
+
+  <!-- Google AdSense placement (BODY) -->
+  <!-- Paste AdSense display ad block here when approved -->
 
   <script src="script.js"></script>
 </body>
