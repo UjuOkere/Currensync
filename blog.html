@@ -72,13 +72,21 @@ the<!DOCTYPE html>
 
     <!-- eBook Signup -->
     <section class="ebook-signup">
-      <h2>📘 Free eBook: Smart Money Moves</h2>
-      <p>Want to learn currency secrets and investing strategies?</p>
-      <form name="ebook-signup" method="POST" data-netlify="true">
-        <input type="email" name="email" placeholder="Enter your email" required />
-        <button type="submit">Download eBook</button>
-      </form>
-    </section>
+  <h2>📘 Free eBook: Smart Money Moves</h2>
+  <p>Want to learn currency secrets and investing strategies?</p>
+
+  <form name="ebook-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="ebook-signup" />
+    <p hidden>
+      <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+    </p>
+    <input type="email" name="email" placeholder="Enter your email" required />
+    <button type="submit">Get Free eBook</button>
+  </form>
+
+  <p><small>You’ll be redirected to the download page after signup.</small></p>
+</section>
+
   </main>
 
   <footer>
