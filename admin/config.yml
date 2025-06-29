@@ -1,20 +1,21 @@
 backend:
   name: github
-  repo: your-github-username/currensync-repo  # replace with your GitHub repo path
-  branch: main  # or your default branch name
-  site_domain: https://currensync.vip
-  auth_type: implicit
+  repo: your-github-username/your-repo-name   # 🔁 Replace with your actual GitHub repo (e.g., ujuokere/currensync-site)
+  branch: main
+  app_id: 0v23liisikoXot9EgU0Y
+  base_url: https://currensync.vip
+  auth_endpoint: /api/auth
 
-media_folder: "assets/images"     # Folder for uploaded images
-public_folder: "/assets/images"   # URL path to images
+media_folder: "assets/images/uploads"
+public_folder: "/assets/images/uploads"
 
 collections:
   - name: "blog"
     label: "Blog Posts"
-    folder: "blog"                # Folder where blog posts live
+    folder: "blog"
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Body", name: "body", widget: "markdown"}
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
