@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: your-github-username/your-repo-name   # 🔁 Replace with your actual GitHub repo (e.g., ujuokere/currensync-site)
+  repo: UjuOkere/Currensync
   branch: main
   app_id: 0v23liisikoXot9EgU0Y
   base_url: https://currensync.vip
