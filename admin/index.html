@@ -1,13 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <title>CurrenSync CMS</title>
-    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+    <script src="https://unpkg.com/@staticcms/app@^2.0.0/dist/static-cms-app.js"></script>
   </head>
   <body>
     <script>
-      // Optional: Customize preview templates here if you want later
+      window.CMS_MANUAL_INIT = true;
+      StaticCMS.init({
+        config: {
+          backend: {
+            name: "github",
+            repo: "UjuOkere/Currensync",  // replace this!
+            branch: "main",
+            auth_scope: "repo",
+          },
+          media_folder: "assets/images",
+          public_folder: "/assets/images",
+          collections: [
+            {
+              name: "blog",
+              label: "Blog",
+              folder: "blog",
+              create: true,
+              slug: "{{slug}}",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Date", name: "date", widget: "datetime" },
+                { label: "Body", name: "body", widget: "markdown" }
+              ]
+            }
+          ]
+        }
+      });
     </script>
   </body>
 </html>
