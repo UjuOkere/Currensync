@@ -1,40 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Triggering Netlify to rebuild -->
-<title>CurrenSync CMS Admin Panel</title>
-
-    <script src="https://unpkg.com/@staticcms/app@^2.0.0/dist/static-cms-app.js"></script>
+    <title>CurrenSync CMS Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
   </head>
   <body>
     <script>
       window.CMS_MANUAL_INIT = true;
+    </script>
+    <script>
       StaticCMS.init({
-        config: {
-          backend: {
-            name: "github",
-            repo: "UjuOkere/Currensync",  // replace this!
-            branch: "main",
-            auth_scope: "repo",
-          },
-          media_folder: "assets/images",
-          public_folder: "/assets/images",
-          collections: [
-            {
-              name: "blog",
-              label: "Blog",
-              folder: "blog",
-              create: true,
-              slug: "{{slug}}",
-              fields: [
-                { label: "Title", name: "title", widget: "string" },
-                { label: "Date", name: "date", widget: "datetime" },
-                { label: "Body", name: "body", widget: "markdown" }
-              ]
-            }
-          ]
-        }
+        config: "/admin/config.yml"
       });
     </script>
   </body>
