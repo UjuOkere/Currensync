@@ -5,21 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Currensync CMS</title>
 
-    <!-- Netlify Identity Login Script -->
+    <!-- Netlify Identity Login -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-    <!-- StaticCMS Script -->
-    <script type="module">
-      import StaticCMS from "https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js";
-
-      StaticCMS.init({
+    <!-- StaticCMS Script (UMD bundle for better compatibility) -->
+    <script src="https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.umd.js"></script>
+    
+    <!-- StaticCMS Config -->
+    <script>
+      window.CMS.init({
         config: {
           backend: {
             name: "git-gateway",
             branch: "main"
           },
-          media_folder: "public/uploads",      // Where uploaded files go
-          public_folder: "/uploads",           // Public URL to access them
+          media_folder: "public/uploads",
+          public_folder: "/uploads",
           collections: [
             {
               name: "blog",
