@@ -2,20 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>CurrenSync CMS Admin Panel</title>
+    <title>CurrenSync CMS Admin Panel - Debug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms-app.js"></script>
     <script>
       window.CMS_MANUAL_INIT = true;
-    </script>
-    <script>
-      StaticCMS.init({
-        config: "/admin/config.yml"
+
+      // Show errors on the page
+      window.addEventListener('error', function(event) {
+        document.body.innerHTML =
+          '<pre style="color: red; white-space: pre-wrap; font-family: monospace;">' +
+          'Error: ' + event.message + '\n' +
+          'Source: ' + event.filename + ':' + event.lineno + ':' + event.colno + '\n' +
+          'Stack: ' + (event.error && event.error.stack ? event.error.stack : 'N/A') +
+          '</pre>';
       });
+
+      window.addEventListener('unhandledrejection', function(event) {
+        document.body.innerHTML =
+          '<pre style="color: red; white-space: pre-wrap; font-family: monospace;">' +
+          'Unhandled Promise Rejection: ' + event.reason + '\n' +
+          (event.reason && event.reason.stack ? event.reason.stack : '') +
+          '</pre>';
+      });
+
+      // Initialize CMS with error catching
+      try {
+        StaticCMS.init({
+          config: "/admin/config.yml"
+        });
+      } catch (e) {
+        document.body.innerHTML =
+          '<pre style="color: red; white-space: pre-wrap; font-family: monospace;">' +
+          'Initialization Error: ' + e.message + '\n' +
+          e.stack +
+          '</pre>';
+      }
     </script>
   </head>
   <body>
-    <h1 style="text-align:center;padding-top:50px;font-family:sans-serif;color:#888">
+    <h1 style="text-align:center; padding-top:50px; font-family:sans-serif; color:#888">
       Loading CurrenSync CMS...
     </h1>
   </body>
