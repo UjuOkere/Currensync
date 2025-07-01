@@ -2,61 +2,59 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>CurrenSync CMS Admin Panel - Debug</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CurrenSync CMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       body {
+        margin: 0;
         font-family: sans-serif;
-        text-align: center;
-        padding: 40px;
-        color: #555;
       }
-      .log {
-        white-space: pre-wrap;
-        text-align: left;
-        max-width: 90%;
-        margin: 20px auto;
-        background: #f4f4f4;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 14px;
+
+      #loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.5em;
         color: #333;
       }
     </style>
   </head>
   <body>
-    <h1>🔧 Debugging CurrenSync CMS...</h1>
-    <div id="log" class="log">Initializing...</div>
+    <div id="loading">Initializing CMS...</div>
 
     <script type="module">
-      const log = msg => {
-        document.getElementById("log").textContent += `\n${msg}`;
-      };
+      import StaticCMS from "https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js";
 
-      try {
-        log("Importing StaticCMS module...");
-        const { default: CMS } = await import("https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js");
-
-        if (!CMS) {
-          log("❌ CMS module loaded but is undefined.");
-        } else {
-          log("✅ StaticCMS module imported successfully.");
-
-          try {
-            log("Initializing CMS with config /admin/config.yml...");
-            CMS.init({ config: "/admin/config.yml" });
-            log("✅ CMS.init() called.");
-          } catch (initErr) {
-            log("❌ Error during CMS.init(): " + initErr.message);
-          }
+      StaticCMS.init({
+        config: {
+          backend: {
+            name: "github",
+            repo: "your-username/your-repo", // 🔁 Replace with your actual GitHub repo
+            branch: "main", // Or your working branch
+            base_url: "/api/auth", // Required for GitHub OAuth via Netlify Function
+          },
+          media_folder: "public/uploads",
+          public_folder: "/uploads",
+          site_url: "https://currensync.vip", // Update to your site URL
+          display_url: "https://currensync.vip", // Optional
+          collections: [
+            {
+              name: "blog",
+              label: "Blog",
+              folder: "blog",
+              create: true,
+              slug: "{{slug}}",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Date", name: "date", widget: "datetime" },
+                { label: "Tags", name: "tags", widget: "list", default: [] },
+                { label: "Body", name: "body", widget: "markdown" }
+              ]
+            }
+          ]
         }
-      } catch (err) {
-        log("❌ Error loading CMS module: " + err.message);
-      }
-
-      window.onerror = function (msg, url, line, col, error) {
-        log(`❌ JS Error: ${msg} at ${line}:${col}`);
-      };
+      });
     </script>
   </body>
 </html>
