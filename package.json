@@ -1,7 +1,0 @@
-{
-  "name": "currensync",
-  "version": "1.0.0",
-  "dependencies": {
-    "@staticcms/netlify-oauth": "staticcms/static-cms/packages/netlify-oauth"
-  }
-}
