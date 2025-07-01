@@ -1,0 +1,16 @@
+{
+  "name": "currensync",
+  "version": "1.0.0",
+  "description": "StaticCMS GitHub OAuth setup for Currensync",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build script necessary for functions-only project'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@staticcms/netlify-oauth": "1.0.0"
+  },
+  "license": "MIT"
+}
