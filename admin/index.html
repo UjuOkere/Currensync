@@ -5,8 +5,10 @@
     <title>CurrenSync CMS Admin Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module">
-      import { CMS } from "https://unpkg.com/@staticcms/app@latest/dist/static-cms.js";
+      // import the default export as CMS
+      import CMS from "https://unpkg.com/@staticcms/app@latest/dist/static-cms.js";
 
+      // initialize with your config
       CMS.init({
         config: "/admin/config.yml"
       });
