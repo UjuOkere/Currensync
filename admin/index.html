@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Currensync CMS</title>
+
+    <!-- Netlify Identity Login Script -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- StaticCMS Script -->
     <script type="module">
       import StaticCMS from "https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js";
 
@@ -13,8 +18,8 @@
             name: "git-gateway",
             branch: "main"
           },
-          media_folder: "public/uploads",      // Folder in repo for uploaded images
-          public_folder: "/uploads",           // Public URL path for those images
+          media_folder: "public/uploads",      // Where uploaded files go
+          public_folder: "/uploads",           // Public URL to access them
           collections: [
             {
               name: "blog",
