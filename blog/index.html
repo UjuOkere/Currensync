@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CurrenSync Blog | Smart Money & ICT Research</title>
+  <link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+  <header>
+    <h1>🪙 CurrenSync Blog</h1>
+    <p>Smart Money Moves, Currency Hacks & ICT for Education</p>
+
+    <!-- Filter + Sort Controls -->
+    <div>
+      <label for="tagFilter">Filter by Tag:</label>
+      <select id="tagFilter">
+        <option value="all">All</option>
+      </select>
+
+      <label for="sortOrder">Sort:</label>
+      <select id="sortOrder">
+        <option value="desc">Newest First</option>
+        <option value="asc">Oldest First</option>
+      </select>
+    </div>
+  </header>
+
+  <main id="blog-container">
+    <p>Loading blog posts...</p>
+  </main>
+
+  <footer>
+    <p>© 2025 CurrenSync.vip | Fintech Meets Education</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/dist/gray-matter.min.js"></script>
+  <script src="/blog/blog.js"></script>
+</body>
+</html>
