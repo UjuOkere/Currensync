@@ -3,18 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <title>CurrenSync CMS Admin Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        padding: 50px;
+        color: #888;
+      }
+      pre {
+        color: red;
+        text-align: left;
+        margin: 20px auto;
+        max-width: 600px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: #fdd;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Loading CurrenSync CMS...</h1>
+
     <script type="module">
       import CMS from "https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js";
 
       CMS.init({
         config: "/admin/config.yml"
+      }).catch(error => {
+        const pre = document.createElement('pre');
+        pre.textContent = `CMS init error: ${error.message}`;
+        document.body.appendChild(pre);
       });
+
+      window.onerror = (msg, url, line, col, err) => {
+        const pre = document.createElement('pre');
+        pre.textContent = `Error: ${msg} at ${line}:${col}`;
+        document.body.appendChild(pre);
+      };
     </script>
-  </head>
-  <body>
-    <h1 style="text-align:center; padding-top:50px; font-family:sans-serif; color:#888;">
-      Loading CurrenSync CMS...
-    </h1>
   </body>
 </html>
