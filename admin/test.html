@@ -3,16 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <title>Test StaticCMS Script Load</title>
-  <script src="https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms-app.js"></script>
 </head>
 <body>
   <h1>Testing StaticCMS Script Load</h1>
   <script>
-    if (typeof StaticCMS !== 'undefined') {
-      document.body.innerHTML += '<p style="color:green;">StaticCMS script loaded successfully!</p>';
-    } else {
-      document.body.innerHTML += '<p style="color:red;">StaticCMS script failed to load.</p>';
+    function loadScript(src, onLoad, onError) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = onLoad;
+      s.onerror = onError;
+      document.head.appendChild(s);
     }
+
+    loadScript(
+      'https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms-app.js',
+      function() {
+        if (typeof StaticCMS !== 'undefined') {
+          document.body.innerHTML += '<p style="color:green;">StaticCMS script loaded successfully!</p>';
+        } else {
+          document.body.innerHTML += '<p style="color:red;">StaticCMS script loaded but StaticCMS is undefined.</p>';
+        }
+      },
+      function() {
+        document.body.innerHTML += '<p style="color:red;">Failed to load StaticCMS script.</p>';
+      }
+    );
   </script>
 </body>
 </html>
