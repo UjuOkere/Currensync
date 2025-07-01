@@ -3,3 +3,8 @@
 
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
+  
+[[headers]]
+  for = "/admin/config.yml"
+  [headers.values]
+    Content-Type = "text/plain"
