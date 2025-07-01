@@ -2,9 +2,8 @@ backend:
   name: github
   repo: UjuOkere/Currensync
   branch: main
+  auth_type: implicit
   app_id: 0v23liisikoXot9EgU0Y
-  base_url: https://currensync.vip
-  auth_endpoint: /api/auth
 
 media_folder: "assets/images/uploads"
 public_folder: "/assets/images/uploads"
