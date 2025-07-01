@@ -2,46 +2,60 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>CurrenSync CMS Admin Panel</title>
+    <title>CurrenSync CMS Admin Panel - Debug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body {
         font-family: sans-serif;
         text-align: center;
-        padding: 50px;
-        color: #888;
+        padding: 40px;
+        color: #555;
       }
-      pre {
-        color: red;
-        text-align: left;
-        margin: 20px auto;
-        max-width: 600px;
+      .log {
         white-space: pre-wrap;
-        word-break: break-word;
-        background: #fdd;
+        text-align: left;
+        max-width: 90%;
+        margin: 20px auto;
+        background: #f4f4f4;
         padding: 10px;
         border-radius: 5px;
+        font-size: 14px;
+        color: #333;
       }
     </style>
   </head>
   <body>
-    <h1>Loading CurrenSync CMS...</h1>
+    <h1>🔧 Debugging CurrenSync CMS...</h1>
+    <div id="log" class="log">Initializing...</div>
 
     <script type="module">
-      import CMS from "https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js";
+      const log = msg => {
+        document.getElementById("log").textContent += `\n${msg}`;
+      };
 
-      CMS.init({
-        config: "/admin/config.yml"
-      }).catch(error => {
-        const pre = document.createElement('pre');
-        pre.textContent = `CMS init error: ${error.message}`;
-        document.body.appendChild(pre);
-      });
+      try {
+        log("Importing StaticCMS module...");
+        const { default: CMS } = await import("https://unpkg.com/@staticcms/app@3.0.1/dist/static-cms.js");
 
-      window.onerror = (msg, url, line, col, err) => {
-        const pre = document.createElement('pre');
-        pre.textContent = `Error: ${msg} at ${line}:${col}`;
-        document.body.appendChild(pre);
+        if (!CMS) {
+          log("❌ CMS module loaded but is undefined.");
+        } else {
+          log("✅ StaticCMS module imported successfully.");
+
+          try {
+            log("Initializing CMS with config /admin/config.yml...");
+            CMS.init({ config: "/admin/config.yml" });
+            log("✅ CMS.init() called.");
+          } catch (initErr) {
+            log("❌ Error during CMS.init(): " + initErr.message);
+          }
+        }
+      } catch (err) {
+        log("❌ Error loading CMS module: " + err.message);
+      }
+
+      window.onerror = function (msg, url, line, col, error) {
+        log(`❌ JS Error: ${msg} at ${line}:${col}`);
       };
     </script>
   </body>
