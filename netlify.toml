@@ -5,3 +5,7 @@
   from = "/api/auth"
   to = "/.netlify/functions/auth"
   status = 200
+
+  [[plugins]]
+package = "@netlify/plugin-functions-install-core"
+
