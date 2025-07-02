@@ -95,7 +95,7 @@
 
     async function fetchPosts() {
       try {
-        const res = await fetch('/blog/posts.json');
+        const res = await fetch('/blogdata.json');
         posts = await res.json();
         renderPosts();
       } catch (e) {
