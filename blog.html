@@ -5,67 +5,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CurrenSync Blog | Fintech & Research</title>
 
-  <meta name="description" content="Smart currency tools, investing tips, and academic research from Obianuju Stella Okere." />
-  <meta name="keywords" content="Fintech, Research, Currency Tools, Digital Records, Nigeria" />
+  <!-- SEO Meta -->
+  <meta name="description" content="Explore fintech tools and ICT research from CurrenSync.vip by Obianuju Stella Okere." />
   <meta name="author" content="Obianuju Stella Okere" />
+  <link rel="canonical" href="https://orcid.org/0009-0007-9640-688X" />
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="CurrenSync Blog" />
+  <meta property="og:description" content="Currency tools, digital research, and money tips." />
+  <meta property="og:image" content="https://currensync.vip/assets/img/logo.png" />
+  <meta property="og:url" content="https://currensync.vip/blog.html" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CurrenSync Blog | Fintech Meets Education" />
+  <meta name="twitter:image" content="https://currensync.vip/assets/img/logo.png" />
+
+  <!-- Google AdSense Auto Ads -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451" crossorigin="anonymous"></script>
+
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "Segoe UI", sans-serif;
       margin: 0;
       padding: 0;
+      line-height: 1.6;
       background: #f9f9f9;
-      color: #222;
+      color: #333;
     }
-    header, footer {
-      background: #003366;
+    header {
+      background: #0c2d57;
       color: white;
-      padding: 1.5rem;
+      padding: 2rem 1rem;
       text-align: center;
     }
     header h1 {
-      margin: 0;
+      margin: 0 0 0.5rem;
       font-size: 2rem;
     }
     main {
-      padding: 1.5rem;
-      max-width: 800px;
-      margin: auto;
+      max-width: 850px;
+      margin: 2rem auto;
+      padding: 1rem;
     }
-    .post-preview {
+    .blog-post {
       background: white;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border-left: 5px solid #0077cc;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
-    .post-preview h2 {
+    .blog-post h2 {
       margin-top: 0;
+      font-size: 1.4rem;
     }
-    .post-preview a {
-      color: #003366;
+    .blog-post a {
+      color: #0c2d57;
       text-decoration: none;
     }
-    .post-preview a:hover {
+    .blog-post a:hover {
       text-decoration: underline;
+    }
+    .blog-post em {
+      font-size: 0.9rem;
+      color: #666;
     }
     .pagination {
       text-align: center;
-      margin-top: 2rem;
+      margin: 3rem 0;
     }
     .pagination button {
-      background: #003366;
+      margin: 0 0.25rem;
+      padding: 0.5rem 1rem;
+      background: #0c2d57;
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
-      margin: 0 0.25rem;
-      cursor: pointer;
       border-radius: 4px;
+      cursor: pointer;
     }
-    .pagination button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    .pagination button.active {
+      background: #f4a261;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+      background: #eee;
+      margin-top: 4rem;
+    }
+    /* Ad placeholder */
+    .ad-banner {
+      text-align: center;
+      margin: 2rem 0;
     }
   </style>
 </head>
@@ -73,58 +104,82 @@
 <body>
   <header>
     <h1>🪙 CurrenSync Blog</h1>
-    <p>Smart Money Moves, Currency Hacks & Academic Research</p>
+    <p>Smart Money Moves, Currency Hacks & Global Wealth Tips</p>
   </header>
 
-  <main id="blog-container">
-    <div id="posts"></div>
-    <div class="pagination">
-      <button id="prevBtn" onclick="changePage(-1)">Previous</button>
-      <button id="nextBtn" onclick="changePage(1)">Next</button>
+  <main>
+    <div id="posts-container"></div>
+
+    <!-- Manual AdSense Banner: Placed after posts -->
+    <div class="ad-banner">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6539693262305451"
+           data-ad-slot="8720273670"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     </div>
+
+    <div class="pagination" id="pagination"></div>
   </main>
 
   <footer>
-    <p>© 2025 CurrenSync.vip | Powered by Obianuju Stella Okere 🌍</p>
+    <p>© 2025 CurrenSync.vip | Built for smart global earners 🌍</p>
   </footer>
 
   <script>
-    const postsPerPage = 2;
+    const POSTS_PER_PAGE = 8;
     let currentPage = 1;
     let posts = [];
 
     async function fetchPosts() {
       try {
-        const res = await fetch('/blogdata.json');
+        const res = await fetch("blogdata.json");
         posts = await res.json();
         renderPosts();
-      } catch (e) {
-        document.getElementById('posts').innerHTML = '<p>Error loading blog posts. Please try again later.</p>';
+        renderPagination();
+      } catch {
+        document.getElementById("posts-container").innerHTML = "<p>Error loading blog posts.</p>";
       }
     }
 
     function renderPosts() {
-      const start = (currentPage - 1) * postsPerPage;
-      const end = start + postsPerPage;
-      const currentPosts = posts.slice(start, end);
+      const start = (currentPage - 1) * POSTS_PER_PAGE;
+      const end = start + POSTS_PER_PAGE;
+      const visible = posts.slice(start, end);
+      const container = document.getElementById("posts-container");
+      container.innerHTML = "";
 
-      const postsHTML = currentPosts.map(post => `
-        <div class="post-preview">
-          <h2><a href="/blog/${post.slug}">${post.title}</a></h2>
-          <p><em>By ${post.author} | ${post.date}</em></p>
-          <p>${post.summary}</p>
-        </div>
-      `).join('');
-
-      document.getElementById('posts').innerHTML = postsHTML;
-
-      document.getElementById('prevBtn').disabled = currentPage === 1;
-      document.getElementById('nextBtn').disabled = end >= posts.length;
+      visible.forEach(post => {
+        const div = document.createElement("div");
+        div.className = "blog-post";
+        div.innerHTML = `
+          <h2><a href="${post.file.replace(".md", ".html")}">${post.title}</a></h2>
+          <p><em>${new Date(post.date).toDateString()}</em></p>
+          <p>Tags: ${post.tags.join(", ")}</p>
+        `;
+        container.appendChild(div);
+      });
     }
 
-    function changePage(offset) {
-      currentPage += offset;
-      renderPosts();
+    function renderPagination() {
+      const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+      const container = document.getElementById("pagination");
+      container.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        if (i === currentPage) btn.classList.add("active");
+        btn.onclick = () => {
+          currentPage = i;
+          renderPosts();
+          renderPagination();
+        };
+        container.appendChild(btn);
+      }
     }
 
     fetchPosts();
