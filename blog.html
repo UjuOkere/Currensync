@@ -93,7 +93,6 @@
       background: #eee;
       margin-top: 4rem;
     }
-    /* Ad placeholder */
     .ad-banner {
       text-align: center;
       margin: 2rem 0;
@@ -110,7 +109,7 @@
   <main>
     <div id="posts-container"></div>
 
-    <!-- Manual AdSense Banner: Placed after posts -->
+    <!-- Manual AdSense Banner -->
     <div class="ad-banner">
       <ins class="adsbygoogle"
            style="display:block"
@@ -157,9 +156,9 @@
         const div = document.createElement("div");
         div.className = "blog-post";
         div.innerHTML = `
-          <h2><a href="${post.file.replace(".md", ".html")}">${post.title}</a></h2>
+          <h2><a href="${post.slug}">${post.title}</a></h2>
           <p><em>${new Date(post.date).toDateString()}</em></p>
-          <p>Tags: ${post.tags.join(", ")}</p>
+          <p>Tags: ${post.tags?.join(", ") || "None"}</p>
         `;
         container.appendChild(div);
       });
