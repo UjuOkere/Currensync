@@ -1,23 +1,20 @@
 [
   {
-    "title": "Top 5 Currency Tools Every Traveler Should Have",
-    "date": "June 2025",
-    "author": "CurrenSync.vip",
-    "slug": "blog/post1.html",
-    "summary": "Explore the essential tools that help travelers save money, avoid scams, and manage foreign currencies like a pro."
+    "file": "smart-currency-habits.md",
+    "title": "Smart Currency Habits That Save You Money Abroad",
+    "date": "2025-07-02",
+    "tags": ["currency", "finance", "travel", "smart money"]
   },
   {
-    "title": "How to Choose the Right Currency to Invest In",
-    "date": "June 2025",
-    "author": "CurrenSync.vip",
-    "slug": "blog/post2.html",
-    "summary": "From interest rates to political stability, discover how to spot strong currencies for long-term investing."
+    "file": "first-post.md",
+    "title": "Top 5 Currency Tools Every Traveler Should Have",
+    "date": "2025-07-01",
+    "tags": ["currency", "travel", "fintech"]
+  },
+  {
+    "file": "research.md",
+    "title": "The Digital Skills Gap in Nigerian Polytechnics",
+    "date": "2025-06-25",
+    "tags": ["ICT", "research", "education"]
   }
 ]
-{
-  "file": "smart-currency-habits.md",
-  "title": "Smart Currency Habits That Save You Money Abroad",
-  "date": "2025-07-02",
-  "tags": ["currency", "finance", "travel", "smart money"]
-}
-
