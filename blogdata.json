@@ -1,1 +1,50 @@
-a
+[
+  {
+    "title": "Smart Currency Habits That Save You Money Abroad",
+    "date": "2025-07-02",
+    "author": "CurrenSync.vip",
+    "slug": "blog/post3.html",
+    "summary": "Learn the small money habits that save big when you're traveling internationally. Don't just exchange—exchange smart.",
+    "tags": ["currency", "finance", "travel", "money tips"]
+  },
+  {
+    "title": "Top 5 Currency Tools Every Traveler Should Have",
+    "date": "2025-06-30",
+    "author": "CurrenSync.vip",
+    "slug": "blog/post1.html",
+    "summary": "Explore the essential tools that help travelers save money, avoid scams, and manage foreign currencies like a pro.",
+    "tags": ["currency tools", "travel", "fintech", "money management"]
+  },
+  {
+    "title": "How to Choose the Right Currency to Invest In",
+    "date": "2025-06-25",
+    "author": "CurrenSync.vip",
+    "slug": "blog/post2.html",
+    "summary": "From interest rates to political stability, discover how to spot strong currencies for long-term investing.",
+    "tags": ["currency investing", "finance", "economics", "market trends"]
+  },
+  {
+    "title": "Elon Musk Battles State Laws on Social Media Speech",
+    "date": "2025-07-03",
+    "author": "CurrenSync.vip",
+    "slug": "blog/post4.html",
+    "summary": "Musk’s company X is suing U.S. states over deepfake bans and hate speech rules, citing free speech rights.",
+    "tags": ["Elon Musk", "free speech", "social media", "tech news", "AI"]
+  },
+  {
+    "title": "Trump’s Tough Policies Hit Legal and Diplomatic Snags",
+    "date": "2025-07-03",
+    "author": "CurrenSync.vip",
+    "slug": "blog/post5.html",
+    "summary": "Federal judge blocks Trump’s new asylum rule; Trump calls for Syria talks and signals change on Iran.",
+    "tags": ["Donald Trump", "immigration", "Middle East", "foreign policy", "politics"]
+  },
+  {
+    "title": "Sean ‘Diddy’ Combs Convicted in High-Profile Prostitution Trial",
+    "date": "2025-07-03",
+    "author": "CurrenSync.vip",
+    "slug": "blog/post6.html",
+    "summary": "Diddy found guilty of transporting women for prostitution. Acquitted of trafficking, he awaits sentencing.",
+    "tags": ["Sean Diddy Combs", "celebrity news", "legal case", "entertainment", "trial"]
+  }
+]
