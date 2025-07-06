@@ -4,29 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CurrenSync Blog | Smart Money & ICT Research</title>
-  
-  <!-- SEO & Social -->
-  <meta name="description" content="Fintech, celebrity buzz, and ICT research insights from CurrenSync.vip." />
-  <meta name="author" content="Obianuju Stella Okere" />
-  <meta property="og:title" content="CurrenSync Blog" />
-  <meta property="og:description" content="Smart Money Moves, Currency Hacks & ICT for Education" />
-  <meta property="og:image" content="https://currensync.vip/assets/img/logo.png" />
-  <meta property="og:url" content="https://currensync.vip/blog.html" />
 
   <!-- AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451" crossorigin="anonymous"></script>
 
-  <!-- Styles -->
+  <!-- Styling -->
   <link rel="stylesheet" href="/assets/css/blog.css" />
   <style>
+    :root {
+      --main-red: #b30000;
+      --accent-red: #ff4d4d;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #fff9f9;
       margin: 0;
+      padding: 0;
       color: #222;
     }
+
     header {
-      background: linear-gradient(to right, #b30000, #ff4d4d);
+      background: linear-gradient(to right, var(--main-red), var(--accent-red));
       padding: 2rem 1rem;
       text-align: center;
       color: white;
@@ -35,68 +34,141 @@
       top: 0;
       z-index: 1000;
     }
+
     header h1 {
       margin: 0;
-      font-size: 2.4rem;
+      font-size: 1.8rem;
     }
+
     header p {
-      margin-top: 0.5rem;
-      font-size: 1rem;
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
     }
+
     header div {
       margin-top: 1rem;
     }
+
     label {
-      margin: 0 0.5rem;
+      font-size: 0.85rem;
       font-weight: bold;
+      margin-right: 0.4rem;
     }
+
     select, input[type="text"] {
-      margin: 0 0.5rem;
-      padding: 0.4rem;
-      border-radius: 5px;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      margin: 0.2rem;
+      border-radius: 4px;
       border: 1px solid #ccc;
     }
-    .search-bar {
-      margin-top: 1rem;
-    }
+
     #recent-slider {
       display: flex;
       overflow-x: auto;
       gap: 1rem;
       padding: 1rem;
+      scroll-behavior: smooth;
     }
+
     .slide {
       flex: 0 0 auto;
-      width: 220px;
+      width: 200px;
       background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
       padding: 0.8rem;
     }
+
     .slide img {
       width: 100%;
-      border-radius: 6px;
+      height: auto;
+      border-radius: 5px;
     }
+
     .slide h4 {
       font-size: 1rem;
       margin: 0.5rem 0 0;
-      color: #b30000;
     }
+
+    main#blog-container {
+      max-width: 960px;
+      margin: 1rem auto;
+      padding: 0 1rem;
+    }
+
+    .blog-post {
+      background: white;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .blog-post h2 {
+      font-size: 1.2rem;
+      margin: 0 0 0.3rem;
+    }
+
+    .blog-post p {
+      font-size: 0.95rem;
+    }
+
     .ad-banner {
       text-align: center;
       margin: 2rem 0;
     }
+
     footer {
-      text-align: center;
       background: #ffeaea;
-      color: #b30000;
-      padding: 2rem 1rem;
-      margin-top: 3rem;
+      color: var(--main-red);
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1.5rem 0;
     }
 
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media screen and (max-width: 768px) {
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      #recent-slider {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+
+      .slide {
+        width: 160px;
+        padding: 0.5rem;
+      }
+
+      .slide h4 {
+        font-size: 0.9rem;
+      }
+
+      .blog-post {
+        padding: 0.8rem;
+      }
+
+      .blog-post h2 {
+        font-size: 1.05rem;
+      }
+
+      select, input[type="text"] {
+        width: 100%;
+        margin-top: 0.4rem;
+      }
+
+      header div {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
@@ -107,7 +179,7 @@
     <p>Your Fintech & Celebrity News Blog 🌍💸🎬</p>
 
     <div>
-      <label for="tagFilter">Filter by Tag:</label>
+      <label for="tagFilter">Tag:</label>
       <select id="tagFilter"><option value="all">All</option></select>
 
       <label for="sortOrder">Sort:</label>
@@ -120,10 +192,10 @@
     </div>
   </header>
 
-  <!-- Recent Posts Slider -->
+  <!-- Slider -->
   <section id="recent-slider"></section>
 
-  <!-- AdSense Banner -->
+  <!-- AdSense -->
   <div class="ad-banner">
     <ins class="adsbygoogle"
          style="display:block"
@@ -134,32 +206,32 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <!-- Blog Posts -->
+  <!-- Main Blog Area -->
   <main id="blog-container">
     <p>Loading blog posts...</p>
   </main>
 
   <footer>
-    <p>© 2025 CurrenSync.vip | Fintech Meets Education & Celebrity Buzz</p>
+    <p>© 2025 CurrenSync.vip — Where Fintech Meets Celebrity Buzz 🎉</p>
   </footer>
 
-  <!-- Dependencies -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/dist/gray-matter.min.js"></script>
   <script src="/blog/blog.js"></script>
 
-  <!-- Dynamic Enhancements -->
+  <!-- Blog Interactivity Script -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       fetch("blogdata.json")
         .then((res) => res.json())
         .then((posts) => {
-          const blogContainer = document.getElementById("blog-container");
+          const container = document.getElementById("blog-container");
           const tagFilter = document.getElementById("tagFilter");
           const sortOrder = document.getElementById("sortOrder");
           const searchInput = document.getElementById("searchInput");
 
-          // Fill tags
+          // Tag Filters
           const allTags = new Set(posts.flatMap(p => p.tags));
           allTags.forEach(tag => {
             const option = document.createElement("option");
@@ -169,18 +241,17 @@
           });
 
           // Slider
-          const recentSlider = document.getElementById("recent-slider");
-          posts.slice(0, 5).forEach(post => {
-            const div = document.createElement("div");
-            div.className = "slide";
-            div.innerHTML = `
-              <img src="${post.thumb || 'https://via.placeholder.com/220x120'}" alt="${post.title}" />
-              <h4><a href="${post.slug}">${post.title}</a></h4>
+          const slider = document.getElementById("recent-slider");
+          posts.slice(0, 6).forEach(p => {
+            const slide = document.createElement("div");
+            slide.className = "slide";
+            slide.innerHTML = `
+              <img src="${p.thumb || 'https://via.placeholder.com/200x120'}" alt="${p.title}" />
+              <h4><a href="${p.slug}">${p.title}</a></h4>
             `;
-            recentSlider.appendChild(div);
+            slider.appendChild(slide);
           });
 
-          // Render posts
           function renderPosts() {
             const tag = tagFilter.value;
             const order = sortOrder.value;
@@ -191,22 +262,19 @@
               p.title.toLowerCase().includes(query)
             );
 
-            if (order === "asc") filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-            else filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            filtered.sort((a, b) => (order === "asc" ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date)));
 
-            blogContainer.innerHTML = "";
+            container.innerHTML = "";
             filtered.forEach(p => {
               const div = document.createElement("div");
               div.className = "blog-post";
-              div.style.borderBottom = "1px solid #eee";
-              div.style.padding = "1.2rem";
               div.innerHTML = `
                 <h2><a href="${p.slug}">${p.title}</a></h2>
                 <p><em>${new Date(p.date).toDateString()}</em></p>
                 <p>${p.summary}</p>
                 <p><strong>Tags:</strong> ${p.tags.join(", ")}</p>
               `;
-              blogContainer.appendChild(div);
+              container.appendChild(div);
             });
           }
 
