@@ -4,38 +4,219 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CurrenSync Blog | Smart Money & ICT Research</title>
+  
+  <!-- SEO & Social -->
+  <meta name="description" content="Fintech, celebrity buzz, and ICT research insights from CurrenSync.vip." />
+  <meta name="author" content="Obianuju Stella Okere" />
+  <meta property="og:title" content="CurrenSync Blog" />
+  <meta property="og:description" content="Smart Money Moves, Currency Hacks & ICT for Education" />
+  <meta property="og:image" content="https://currensync.vip/assets/img/logo.png" />
+  <meta property="og:url" content="https://currensync.vip/blog.html" />
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451" crossorigin="anonymous"></script>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/blog.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff9f9;
+      margin: 0;
+      color: #222;
+    }
+    header {
+      background: linear-gradient(to right, #b30000, #ff4d4d);
+      padding: 2rem 1rem;
+      text-align: center;
+      color: white;
+      animation: fadeInDown 1s ease-in-out;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.4rem;
+    }
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+    header div {
+      margin-top: 1rem;
+    }
+    label {
+      margin: 0 0.5rem;
+      font-weight: bold;
+    }
+    select, input[type="text"] {
+      margin: 0 0.5rem;
+      padding: 0.4rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .search-bar {
+      margin-top: 1rem;
+    }
+    #recent-slider {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .slide {
+      flex: 0 0 auto;
+      width: 220px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 0.8rem;
+    }
+    .slide img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .slide h4 {
+      font-size: 1rem;
+      margin: 0.5rem 0 0;
+      color: #b30000;
+    }
+    .ad-banner {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    footer {
+      text-align: center;
+      background: #ffeaea;
+      color: #b30000;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
+
 <body>
   <header>
-    <h1>🪙 CurrenSync Blog</h1>
-    <p>Smart Money Moves, Currency Hacks & ICT for Education</p>
+    <h1>🎉 WELCOME TO CURRENSYNC</h1>
+    <p>Your Fintech & Celebrity News Blog 🌍💸🎬</p>
 
-    <!-- Filter + Sort Controls -->
     <div>
       <label for="tagFilter">Filter by Tag:</label>
-      <select id="tagFilter">
-        <option value="all">All</option>
-      </select>
+      <select id="tagFilter"><option value="all">All</option></select>
 
       <label for="sortOrder">Sort:</label>
       <select id="sortOrder">
         <option value="desc">Newest First</option>
         <option value="asc">Oldest First</option>
       </select>
+
+      <input type="text" id="searchInput" placeholder="Search posts..." />
     </div>
   </header>
 
+  <!-- Recent Posts Slider -->
+  <section id="recent-slider"></section>
+
+  <!-- AdSense Banner -->
+  <div class="ad-banner">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6539693262305451"
+         data-ad-slot="8720273670"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Blog Posts -->
   <main id="blog-container">
     <p>Loading blog posts...</p>
   </main>
 
   <footer>
-    <p>© 2025 CurrenSync.vip | Fintech Meets Education</p>
+    <p>© 2025 CurrenSync.vip | Fintech Meets Education & Celebrity Buzz</p>
   </footer>
 
+  <!-- Dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/dist/gray-matter.min.js"></script>
   <script src="/blog/blog.js"></script>
+
+  <!-- Dynamic Enhancements -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("blogdata.json")
+        .then((res) => res.json())
+        .then((posts) => {
+          const blogContainer = document.getElementById("blog-container");
+          const tagFilter = document.getElementById("tagFilter");
+          const sortOrder = document.getElementById("sortOrder");
+          const searchInput = document.getElementById("searchInput");
+
+          // Fill tags
+          const allTags = new Set(posts.flatMap(p => p.tags));
+          allTags.forEach(tag => {
+            const option = document.createElement("option");
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+          });
+
+          // Slider
+          const recentSlider = document.getElementById("recent-slider");
+          posts.slice(0, 5).forEach(post => {
+            const div = document.createElement("div");
+            div.className = "slide";
+            div.innerHTML = `
+              <img src="${post.thumb || 'https://via.placeholder.com/220x120'}" alt="${post.title}" />
+              <h4><a href="${post.slug}">${post.title}</a></h4>
+            `;
+            recentSlider.appendChild(div);
+          });
+
+          // Render posts
+          function renderPosts() {
+            const tag = tagFilter.value;
+            const order = sortOrder.value;
+            const query = searchInput.value.toLowerCase();
+
+            let filtered = posts.filter(p =>
+              (tag === "all" || p.tags.includes(tag)) &&
+              p.title.toLowerCase().includes(query)
+            );
+
+            if (order === "asc") filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            else filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            blogContainer.innerHTML = "";
+            filtered.forEach(p => {
+              const div = document.createElement("div");
+              div.className = "blog-post";
+              div.style.borderBottom = "1px solid #eee";
+              div.style.padding = "1.2rem";
+              div.innerHTML = `
+                <h2><a href="${p.slug}">${p.title}</a></h2>
+                <p><em>${new Date(p.date).toDateString()}</em></p>
+                <p>${p.summary}</p>
+                <p><strong>Tags:</strong> ${p.tags.join(", ")}</p>
+              `;
+              blogContainer.appendChild(div);
+            });
+          }
+
+          tagFilter.onchange = renderPosts;
+          sortOrder.onchange = renderPosts;
+          searchInput.oninput = renderPosts;
+
+          renderPosts();
+        });
+    });
+  </script>
 </body>
 </html>
