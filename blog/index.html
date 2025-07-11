@@ -1,3 +1,4 @@
+<!-- FULL CODE -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +17,10 @@
       --accent-red: #ff4d4d;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #fff9f9;
@@ -26,10 +31,9 @@
 
     header {
       background: linear-gradient(to right, var(--main-red), var(--accent-red));
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       color: white;
-      animation: fadeInDown 1s ease-in-out;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -37,30 +41,41 @@
 
     header h1 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
     }
 
     header p {
       margin-top: 0.4rem;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+    }
+
+    header small {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.85rem;
+      color: #fff;
     }
 
     header div {
       margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
     }
 
     label {
       font-size: 0.85rem;
       font-weight: bold;
-      margin-right: 0.4rem;
     }
 
     select, input[type="text"] {
       padding: 0.5rem;
       font-size: 0.9rem;
-      margin: 0.2rem;
       border-radius: 4px;
       border: 1px solid #ccc;
+      min-width: 140px;
+      max-width: 100%;
     }
 
     #recent-slider {
@@ -69,6 +84,7 @@
       gap: 1rem;
       padding: 1rem;
       scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
 
     .slide {
@@ -92,9 +108,8 @@
     }
 
     main#blog-container {
-      max-width: 960px;
-      margin: 1rem auto;
-      padding: 0 1rem;
+      max-width: 100%;
+      padding: 1rem;
     }
 
     .blog-post {
@@ -127,24 +142,22 @@
       padding: 1.5rem 0;
     }
 
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 600px) {
       header h1 {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
       }
 
-      #recent-slider {
-        padding: 0.5rem;
-        gap: 0.5rem;
+      header div {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      select, input[type="text"] {
+        width: 100%;
       }
 
       .slide {
         width: 160px;
-        padding: 0.5rem;
       }
 
       .slide h4 {
@@ -152,22 +165,7 @@
       }
 
       .blog-post {
-        padding: 0.8rem;
-      }
-
-      .blog-post h2 {
-        font-size: 1.05rem;
-      }
-
-      select, input[type="text"] {
-        width: 100%;
-        margin-top: 0.4rem;
-      }
-
-      header div {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
+        padding: 0.9rem;
       }
     }
   </style>
@@ -177,6 +175,7 @@
   <header>
     <h1>🎉 WELCOME TO CURRENSYNC</h1>
     <p>Your Fintech & Celebrity News Blog 🌍💸🎬</p>
+    <small>📧 Contact: ijeibeawuchi@yahoo.com</small>
 
     <div>
       <label for="tagFilter">Tag:</label>
@@ -213,6 +212,7 @@
 
   <footer>
     <p>© 2025 CurrenSync.vip — Where Fintech Meets Celebrity Buzz 🎉</p>
+    <p>Contact: ijeibeawuchi@yahoo.com</p>
   </footer>
 
   <!-- Scripts -->
@@ -220,7 +220,6 @@
   <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/dist/gray-matter.min.js"></script>
   <script src="/blog/blog.js"></script>
 
-  <!-- Blog Interactivity Script -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       fetch("blogdata.json")
@@ -231,7 +230,6 @@
           const sortOrder = document.getElementById("sortOrder");
           const searchInput = document.getElementById("searchInput");
 
-          // Tag Filters
           const allTags = new Set(posts.flatMap(p => p.tags));
           allTags.forEach(tag => {
             const option = document.createElement("option");
@@ -240,7 +238,6 @@
             tagFilter.appendChild(option);
           });
 
-          // Slider
           const slider = document.getElementById("recent-slider");
           posts.slice(0, 6).forEach(p => {
             const slide = document.createElement("div");
