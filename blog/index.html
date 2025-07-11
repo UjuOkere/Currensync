@@ -1,4 +1,3 @@
-<!-- FULL CODE -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,28 +31,27 @@
     header {
       background: linear-gradient(to right, var(--main-red), var(--accent-red));
       padding: 1.5rem 1rem;
-      text-align: center;
       color: white;
       position: sticky;
       top: 0;
       z-index: 1000;
     }
 
+    header h1, header p, header small {
+      text-align: center;
+      margin: 0.3rem 0;
+    }
+
     header h1 {
-      margin: 0;
       font-size: 1.7rem;
     }
 
     header p {
-      margin-top: 0.4rem;
       font-size: 0.95rem;
     }
 
     header small {
-      display: block;
-      margin-top: 0.4rem;
       font-size: 0.85rem;
-      color: #fff;
     }
 
     header div {
@@ -69,7 +67,8 @@
       font-weight: bold;
     }
 
-    select, input[type="text"] {
+    select,
+    input[type="text"] {
       padding: 0.5rem;
       font-size: 0.9rem;
       border-radius: 4px;
@@ -92,7 +91,7 @@
       width: 200px;
       background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
       padding: 0.8rem;
     }
 
@@ -105,6 +104,7 @@
     .slide h4 {
       font-size: 1rem;
       margin: 0.5rem 0 0;
+      text-align: left;
     }
 
     main#blog-container {
@@ -117,7 +117,8 @@
       margin-bottom: 1.5rem;
       padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      text-align: left;
     }
 
     .blog-post h2 {
@@ -137,151 +138,4 @@
     footer {
       background: #ffeaea;
       color: var(--main-red);
-      text-align: center;
-      font-size: 0.9rem;
-      padding: 1.5rem 0;
-    }
-
-    @media screen and (max-width: 600px) {
-      header h1 {
-        font-size: 1.4rem;
-      }
-
-      header div {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      select, input[type="text"] {
-        width: 100%;
-      }
-
-      .slide {
-        width: 160px;
-      }
-
-      .slide h4 {
-        font-size: 0.9rem;
-      }
-
-      .blog-post {
-        padding: 0.9rem;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <h1>🎉 WELCOME TO CURRENSYNC</h1>
-    <p>Your Fintech & Celebrity News Blog 🌍💸🎬</p>
-    <small>📧 Contact: ijeibeawuchi@yahoo.com</small>
-
-    <div>
-      <label for="tagFilter">Tag:</label>
-      <select id="tagFilter"><option value="all">All</option></select>
-
-      <label for="sortOrder">Sort:</label>
-      <select id="sortOrder">
-        <option value="desc">Newest First</option>
-        <option value="asc">Oldest First</option>
-      </select>
-
-      <input type="text" id="searchInput" placeholder="Search posts..." />
-    </div>
-  </header>
-
-  <!-- Slider -->
-  <section id="recent-slider"></section>
-
-  <!-- AdSense -->
-  <div class="ad-banner">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6539693262305451"
-         data-ad-slot="8720273670"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- Main Blog Area -->
-  <main id="blog-container">
-    <p>Loading blog posts...</p>
-  </main>
-
-  <footer>
-    <p>© 2025 CurrenSync.vip — Where Fintech Meets Celebrity Buzz 🎉</p>
-    <p>Contact: ijeibeawuchi@yahoo.com</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/dist/gray-matter.min.js"></script>
-  <script src="/blog/blog.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("blogdata.json")
-        .then((res) => res.json())
-        .then((posts) => {
-          const container = document.getElementById("blog-container");
-          const tagFilter = document.getElementById("tagFilter");
-          const sortOrder = document.getElementById("sortOrder");
-          const searchInput = document.getElementById("searchInput");
-
-          const allTags = new Set(posts.flatMap(p => p.tags));
-          allTags.forEach(tag => {
-            const option = document.createElement("option");
-            option.value = tag;
-            option.textContent = tag;
-            tagFilter.appendChild(option);
-          });
-
-          const slider = document.getElementById("recent-slider");
-          posts.slice(0, 6).forEach(p => {
-            const slide = document.createElement("div");
-            slide.className = "slide";
-            slide.innerHTML = `
-              <img src="${p.thumb || 'https://via.placeholder.com/200x120'}" alt="${p.title}" />
-              <h4><a href="${p.slug}">${p.title}</a></h4>
-            `;
-            slider.appendChild(slide);
-          });
-
-          function renderPosts() {
-            const tag = tagFilter.value;
-            const order = sortOrder.value;
-            const query = searchInput.value.toLowerCase();
-
-            let filtered = posts.filter(p =>
-              (tag === "all" || p.tags.includes(tag)) &&
-              p.title.toLowerCase().includes(query)
-            );
-
-            filtered.sort((a, b) => (order === "asc" ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date)));
-
-            container.innerHTML = "";
-            filtered.forEach(p => {
-              const div = document.createElement("div");
-              div.className = "blog-post";
-              div.innerHTML = `
-                <h2><a href="${p.slug}">${p.title}</a></h2>
-                <p><em>${new Date(p.date).toDateString()}</em></p>
-                <p>${p.summary}</p>
-                <p><strong>Tags:</strong> ${p.tags.join(", ")}</p>
-              `;
-              container.appendChild(div);
-            });
-          }
-
-          tagFilter.onchange = renderPosts;
-          sortOrder.onchange = renderPosts;
-          searchInput.oninput = renderPosts;
-
-          renderPosts();
-        });
-    });
-  </script>
-</body>
-</html>
+      text-a
