@@ -1,305 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CurrenSync Blog | Fintech & Celebrity Buzz</title>
-
-  <!-- SEO -->
-  <meta name="description" content="Smart money, fintech, and celebrity buzz from CurrenSync.vip." />
-  <meta name="author" content="Obianuju Stella Okere" />
-  <link rel="canonical" href="https://currensync.vip/blog.html" />
-
-  <!-- Open Graph & Twitter -->
-  <meta property="og:image" content="https://currensync.vip/assets/img/logo.png" />
-  <meta property="og:title" content="CurrenSync Blog" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="CurrenSync Blog | Fintech Meets Fame" />
-
-  <!-- AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451" crossorigin="anonymous"></script>
-
-  <!-- Styles -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CurrenSync Blog</title>
+  <meta name="description" content="CurrenSync VIP Blog – Latest News, Fintech Trends, Celebrity Updates, and Hot Gist.">
+  <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #fff9f9;
-      color: #222;
-      overflow-x: hidden;
-    }
-
-    .topnav {
-      position: sticky;
-      top: 0;
-      background: #b30000;
-      color: white;
-      padding: .8rem 1rem;
-      z-index: 10;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .topnav a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 .7rem;
-      font-weight: bold;
-    }
-
-    .topnav a:hover {
-      text-decoration: underline;
-    }
-
-    .search-input {
-      padding: 0.4rem;
-      border-radius: 4px;
-      border: none;
-      max-width: 200px;
-    }
-
-    header {
-      text-align: center;
-      padding: 2rem 1rem;
-      background: linear-gradient(to right, #b30000, #ff4d4d);
-      color: white;
-      animation: fadeInDown 1s ease-out;
-    }
-
-    header h1 {
-      font-size: 2.4rem;
-      margin-bottom: 0.5rem;
-    }
-
-    header p {
-      font-size: 1rem;
-      color: #ffeaea;
-    }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .sidebar {
-      flex: 1;
-      background: #fff2f2;
-      padding: 1rem;
-      border-radius: 8px;
-      max-height: calc(100vh - 280px);
-      overflow-y: auto;
-      margin-bottom: 2rem;
-    }
-
-    .sidebar h3 {
-      color: #b30000;
-      margin-top: 0;
-    }
-
-    .tag {
-      display: inline-block;
-      background: #ffe5e5;
-      color: #b30000;
-      margin: 5px 6px;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    .main {
-      flex: 3;
-      margin-right: 1rem;
-      min-width: 280px;
-    }
-
-    .featured {
-      background: #fff0f0;
-      border-left: 5px solid #b30000;
-      padding: 1.2rem;
-      margin-bottom: 2rem;
-      border-radius: 10px;
-      animation: fadeInUp 1s ease-in;
-    }
-
-    .featured img {
-      max-width: 100%;
-      border-radius: 6px;
-      margin-top: 0.7rem;
-    }
-
-    .slider {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .slider .slide {
-      min-width: 200px;
-      flex: none;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      padding: .7rem;
-      animation: fadeInUp 0.6s ease both;
-    }
-
-    .slider img {
-      width: 100%;
-      border-radius: 4px;
-    }
-
-    .slider h4 {
-      margin: 0.5rem 0 0;
-      color: #b30000;
-      font-size: 1rem;
-    }
-
-    .blog-post {
-      display: flex;
-      align-items: flex-start;
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      animation: fadeInUp 0.7s ease both;
-    }
-
-    .blog-post img.thumb {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-right: 1rem;
-    }
-
-    .blog-post h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      color: #b30000;
-    }
-
-    .blog-post em {
-      font-size: 0.85rem;
-      color: #777;
-    }
-
-    .pagination {
-      text-align: center;
-      margin: 3rem 0;
-    }
-
-    .pagination button {
-      padding: 0.6rem 1.1rem;
-      background: #b30000;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      margin: 0 5px;
-      font-weight: bold;
-    }
-
-    .pagination button.active {
-      background: #ff4d4d;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      background: #ffeaea;
-      color: #b30000;
-    }
-
-    .ad-banner {
-      margin: 2rem 0;
-      text-align: center;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      .main {
-        margin-right: 0;
-      }
-      .blog-post {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .blog-post img.thumb {
-        margin-bottom: 1rem;
-      }
-    }
+    body { font-family: Arial, sans-serif; background: #fff; margin: 0; padding: 0; }
+    header { background: red; color: white; padding: 10px; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    #featured img { width: 100%; border-radius: 8px; margin-top: 8px; }
+    #recentSlider { display: flex; overflow-x: auto; gap: 10px; margin: 10px 0; }
+    .slide img { width: 200px; height: 100px; object-fit: cover; border-radius: 6px; }
+    .post-card { background: #f9f9f9; margin: 10px 0; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .post-card img { width: 100%; border-radius: 10px; }
+    .post-card h3 { margin: 10px 0 5px; }
+    #pagination { margin: 20px 0; text-align: center; }
+    #pagination button { margin: 0 3px; padding: 5px 10px; border: none; border-radius: 4px; }
+    #pagination button.active { background: red; color: white; }
+    #tagFilters button { margin: 2px; padding: 4px 8px; border: none; border-radius: 4px; background: #ddd; cursor: pointer; }
+    #searchInput { width: 90%; padding: 8px; margin: 10px auto; display: block; border: 1px solid #ccc; border-radius: 5px; }
   </style>
 </head>
-
 <body>
-  <div class="topnav">
-    <div><a href="#">Home</a><a href="#featured">Featured</a><a href="#tags">Tags</a></div>
-    <input id="searchInput" class="search-input" type="text" placeholder="Search posts..." />
-  </div>
+  <header>Welcome to CurrenSync VIP</header>
 
-  <header>
-    <h1>WELCOME TO CURRENSYNC</h1>
-    <p>Your Fintech and Celebrity News Blog 🌍💸🎬</p>
-  </header>
+  <main>
+    <!-- Search -->
+    <input type="text" id="searchInput" placeholder="Search posts...">
 
-  <div class="container">
-    <div class="main">
-      <div id="featured" class="featured"></div>
+    <!-- Featured Post -->
+    <section id="featured"></section>
 
-      <div class="slider" id="recentSlider"></div>
+    <!-- Recent Slider -->
+    <div id="recentSlider"></div>
 
-      <div id="posts-container"></div>
+    <!-- Tag Filters -->
+    <div id="tagFilters"></div>
 
-      <div class="ad-banner">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6539693262305451"
-             data-ad-slot="8720273670"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
+    <!-- Blog Posts -->
+    <div id="postList"></div>
 
-      <div class="pagination" id="pagination"></div>
-    </div>
-
-    <aside class="sidebar" id="tags">
-      <h3>Filter by Tag</h3>
-      <div id="tag-container"></div>
-    </aside>
-  </div>
-
-  <footer>
-    &copy; 2025 CurrenSync.vip — Powered by Fintech & Fame!
-  </footer>
+    <!-- Pagination -->
+    <div id="pagination"></div>
+  </main>
 
   <script>
     const POSTS_PER_PAGE = 6;
     let currentPage = 1;
-    let posts = [];
+    let allPosts = [];
+    let filteredPosts = [];
 
     async function fetchPosts() {
       const res = await fetch("blogdata.json");
-      posts = await res.json();
+      allPosts = await res.json();
+      filteredPosts = [...allPosts];
       renderFeatured();
       renderRecentSlider();
       renderPosts();
@@ -309,11 +64,12 @@
     }
 
     function renderFeatured() {
-      const latest = posts[0];
+      const latest = filteredPosts[0];
+      if (!latest) return;
       const html = `
         <h2><a href="${latest.slug}">${latest.title}</a></h2>
         <p><em>${new Date(latest.date).toDateString()}</em></p>
-        <img src="${latest.image || 'https://via.placeholder.com/600x300'}" alt="${latest.title}" />
+        <img src="${latest.thumbnail || 'https://via.placeholder.com/600x300'}" alt="${latest.title}">
       `;
       document.getElementById("featured").innerHTML = html;
     }
@@ -321,90 +77,80 @@
     function renderRecentSlider() {
       const slider = document.getElementById("recentSlider");
       slider.innerHTML = "";
-      posts.slice(1, 6).forEach(p => {
+      filteredPosts.slice(1, 6).forEach(p => {
         const slide = document.createElement("div");
         slide.className = "slide";
         slide.innerHTML = `
-          <img src="${p.thumb || 'https://via.placeholder.com/200x100'}" alt="${p.title}" />
+          <img src="${p.thumbnail || 'https://via.placeholder.com/200x100'}" alt="${p.title}">
           <h4><a href="${p.slug}">${p.title}</a></h4>
         `;
         slider.appendChild(slide);
       });
     }
 
-    function renderPosts(filterTag = null, query = "") {
+    function renderPosts() {
+      const list = document.getElementById("postList");
+      list.innerHTML = "";
       const start = (currentPage - 1) * POSTS_PER_PAGE;
-      const container = document.getElementById("posts-container");
-      let filtered = posts;
-
-      if (filterTag) {
-        filtered = filtered.filter(p => p.tags.includes(filterTag));
-      }
-      if (query) {
-        filtered = filtered.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
-      }
-
-      const visible = filtered.slice(start, start + POSTS_PER_PAGE);
-      container.innerHTML = "";
-      visible.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "blog-post";
-        div.innerHTML = `
-          <img class="thumb" src="${p.thumb || 'https://via.placeholder.com/100'}" alt="${p.title}" />
-          <div>
-            <h2><a href="${p.slug}">${p.title}</a></h2>
-            <p><em>${new Date(p.date).toDateString()}</em></p>
-            <p>Tags: ${p.tags.join(", ")}</p>
-          </div>
+      const pagePosts = filteredPosts.slice(start, start + POSTS_PER_PAGE);
+      pagePosts.forEach(p => {
+        const item = document.createElement("div");
+        item.className = "post-card";
+        item.innerHTML = `
+          <img src="${p.thumbnail || 'https://via.placeholder.com/300x200'}" alt="${p.title}">
+          <h3><a href="${p.slug}">${p.title}</a></h3>
+          <p>${p.summary}</p>
         `;
-        container.appendChild(div);
+        list.appendChild(item);
       });
-      renderPaginationFor(filtered.length);
-    }
-
-    function renderPaginationFor(totalPosts) {
-      const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
-      const container = document.getElementById("pagination");
-      container.innerHTML = "";
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        if (i === currentPage) btn.classList.add("active");
-        btn.onclick = () => {
-          currentPage = i;
-          const query = document.getElementById("searchInput").value;
-          renderPosts(null, query);
-        };
-        container.appendChild(btn);
-      }
     }
 
     function renderPagination() {
-      renderPaginationFor(posts.length);
+      const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+      const pagination = document.getElementById("pagination");
+      pagination.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.className = i === currentPage ? "active" : "";
+        btn.addEventListener("click", () => {
+          currentPage = i;
+          renderPosts();
+          renderPagination();
+        });
+        pagination.appendChild(btn);
+      }
     }
 
     function renderTags() {
-      const tagSet = new Set(posts.flatMap(p => p.tags));
-      const tagContainer = document.getElementById("tag-container");
+      const allTags = [...new Set(allPosts.flatMap(p => p.tags))];
+      const tagContainer = document.getElementById("tagFilters");
       tagContainer.innerHTML = "";
-      tagSet.forEach(t => {
-        const btn = document.createElement("span");
-        btn.className = "tag";
-        btn.textContent = t;
-        btn.onclick = () => {
+      allTags.forEach(tag => {
+        const btn = document.createElement("button");
+        btn.textContent = tag;
+        btn.addEventListener("click", () => {
+          filteredPosts = allPosts.filter(p => p.tags.includes(tag));
           currentPage = 1;
-          document.getElementById("searchInput").value = "";
-          renderPosts(t, "");
-        };
+          renderFeatured();
+          renderRecentSlider();
+          renderPosts();
+          renderPagination();
+        });
         tagContainer.appendChild(btn);
       });
     }
 
     function setupSearch() {
-      const input = document.getElementById("searchInput");
-      input.addEventListener("input", () => {
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener("input", e => {
+        const query = e.target.value.toLowerCase();
+        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(query));
         currentPage = 1;
-        renderPosts(null, input.value);
+        renderFeatured();
+        renderRecentSlider();
+        renderPosts();
+        renderPagination();
       });
     }
 
