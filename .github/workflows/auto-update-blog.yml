@@ -4,7 +4,7 @@ on:
   schedule:
     # Runs twice a day: 8 AM and 2 PM UTC
     - cron: '0 8,14 * * *'
-  workflow_dispatch:  # Allows you to trigger manually from Actions tab
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   update-blog:
@@ -27,16 +27,19 @@ jobs:
       - name: Run bot script
         run: python bot.py
 
-
-  
-- name: Commit & Push updated blogdata.json and posts
-  run: |
-    git config user.name "github-actions[bot]"
-    git config user.email "github-actions[bot]@users.noreply.github.com"
-    # Add blogdata.json always
-    git add blogdata.json
-    # Add all HTML files in /blog only if they exist
-    find blog -name "*.html" -exec git add {} \;
-    # Commit only if there are staged changes
-    git diff --cached --quiet || git commit -m "Auto-update blog posts"
-    git push
+      - name: Commit & Push blog updates
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add blogdata.json
+          if [ -d blog ]; then
+            find blog -name "*.html" -exec git add {} \;
+          fi
+          # Only commit if there are staged changes
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update blog posts"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
