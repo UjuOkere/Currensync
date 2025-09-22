@@ -29,17 +29,19 @@ def create_post_file(post_number, title, date, summary, content, tags, thumbnail
 
 # === MAIN BOT FUNCTION ===
 def main():
-    # Load existing blogdata.json
+    # Load existing blogdata.json safely
+    blogdata = []
     if os.path.exists(BLOGDATA_PATH):
         with open(BLOGDATA_PATH, "r", encoding="utf-8") as f:
             try:
                 blogdata = json.load(f)
+                if not isinstance(blogdata, list):
+                    blogdata = []
             except json.JSONDecodeError:
+                print("⚠ blogdata.json corrupted, starting with empty list.")
                 blogdata = []
-    else:
-        blogdata = []
 
-    # Determine next post number
+    # Determine next post number safely
     existing_numbers = [
         int(item["slug"].replace("blog/post", "").replace(".html", ""))
         for item in blogdata if "slug" in item and item["slug"].startswith("blog/post")
@@ -59,7 +61,6 @@ def main():
     tags = ["Automation", "CurrenSync", "Tech News"]
     thumbnail = "https://placehold.co/600x400?text=New+Post"
 
-    # Add post entry to blogdata.json
     new_entry = {
         "title": title,
         "date": today_iso,
@@ -70,14 +71,18 @@ def main():
         "thumbnail": thumbnail
     }
 
-    blogdata.insert(0, new_entry)  # newest first
+    # Check for duplicates to avoid overwriting
+    if not any(p["slug"] == new_entry["slug"] for p in blogdata):
+        blogdata.insert(0, new_entry)
+    else:
+        print("⚠ Post already exists, skipping addition to JSON.")
 
+    # Write JSON safely
     with open(BLOGDATA_PATH, "w", encoding="utf-8") as f:
         json.dump(blogdata, f, indent=2)
+        print(f"✅ Added post{next_post_number} to {BLOGDATA_PATH}")
 
-    print(f"✅ Added post{next_post_number} to {BLOGDATA_PATH}")
-
-    # Create actual post HTML file
+    # Create the actual post HTML file
     create_post_file(next_post_number, title, today_display, summary, content, tags, thumbnail)
 
 
