@@ -3,6 +3,19 @@
     "title": "Breaking: AI-Powered Bot Posts Are Live!",
     "date": "2025-09-22",
     "author": "CurrenSync.vip",
+    "slug": "blog/post2.html",
+    "summary": "Our blog bot just created its first post \u2014 fully automated!",
+    "tags": [
+      "Automation",
+      "CurrenSync",
+      "Tech News"
+    ],
+    "thumbnail": "https://placehold.co/600x400?text=New+Post"
+  },
+  {
+    "title": "Breaking: AI-Powered Bot Posts Are Live!",
+    "date": "2025-09-22",
+    "author": "CurrenSync.vip",
     "slug": "blog/post1.html",
     "summary": "Our blog bot just created its first post \u2014 fully automated!",
     "tags": [
