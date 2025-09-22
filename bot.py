@@ -3,9 +3,10 @@ import os
 from datetime import datetime
 
 # === SETTINGS ===
-BLOGDATA_PATH = "blog/blogdata.json"
+BLOGDATA_PATH = "blogdata.json"          # root folder
 POST_TEMPLATE_PATH = "blog/post-template.html"
 BLOG_FOLDER = "blog"
+AUTHOR = "CurrenSync.vip"
 
 # === FUNCTION TO CREATE POST FILE ===
 def create_post_file(post_number, title, date, summary, content, tags, thumbnail):
@@ -38,17 +39,17 @@ def main():
     else:
         blogdata = []
 
-    # Figure out next post number
+    # Determine next post number
     existing_numbers = [
-        int(item["link"].replace("post", "").replace(".html", ""))
-        for item in blogdata if "link" in item and item["link"].startswith("post")
+        int(item["slug"].replace("blog/post", "").replace(".html", ""))
+        for item in blogdata if "slug" in item and item["slug"].startswith("blog/post")
     ]
     next_post_number = max(existing_numbers) + 1 if existing_numbers else 1
 
     # === BOT-GENERATED POST CONTENT ===
-    # You can make this dynamic (e.g., fetch trending topics) but here's an example
     title = "Breaking: AI-Powered Bot Posts Are Live!"
-    today = datetime.now().strftime("%B %d, %Y")
+    today_iso = datetime.now().strftime("%Y-%m-%d")       # for JSON sorting
+    today_display = datetime.now().strftime("%B %d, %Y")  # human-readable in HTML
     summary = "Our blog bot just created its first post — fully automated!"
     content = """
     <p>This is a test post generated automatically by our blog bot. 
@@ -61,9 +62,10 @@ def main():
     # Add post entry to blogdata.json
     new_entry = {
         "title": title,
-        "date": today,
+        "date": today_iso,
+        "author": AUTHOR,
+        "slug": f"blog/post{next_post_number}.html",
         "summary": summary,
-        "link": f"post{next_post_number}.html",
         "tags": tags,
         "thumbnail": thumbnail
     }
@@ -76,9 +78,8 @@ def main():
     print(f"✅ Added post{next_post_number} to {BLOGDATA_PATH}")
 
     # Create actual post HTML file
-    create_post_file(next_post_number, title, today, summary, content, tags, thumbnail)
+    create_post_file(next_post_number, title, today_display, summary, content, tags, thumbnail)
 
 
 if __name__ == "__main__":
     main()
-  
