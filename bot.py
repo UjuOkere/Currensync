@@ -1,76 +1,67 @@
-import requests
-from bs4 import BeautifulSoup
 import json
+import os
 from datetime import datetime
-import random
 
-JSON_FILE = "blogdata.json"
-NUM_POSTS = 10
+BLOGDATA_PATH = "blogdata.json"
+NEW_POSTS_PATH = "new_posts.json"
 
-CELEB_SOURCES = [
-    {"name": "Gistlover", "url": "https://gistlover.com", "tag": "celebrity"},
-    {"name": "Bellanaija", "url": "https://www.bellanaija.com/category/entertainment/", "tag": "celebrity"},
-    {"name": "Linda Ikeji", "url": "https://www.lindaikejisblog.com/", "tag": "celebrity"},
-    {"name": "StellaDimokoKorkus", "url": "https://www.stelladimokokorkus.com/", "tag": "celebrity"},
-    {"name": "Nairaland Entertainment", "url": "https://www.nairaland.com/entertainment", "tag": "celebrity"}
-]
+def load_json(path):
+    """Load JSON file safely, return empty list if missing or invalid."""
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        print(f"⚠️ Warning: {path} contains invalid JSON, starting fresh.")
+        return []
 
-FINTECH_SOURCES = [
-    {"name": "Finextra", "url": "https://www.finextra.com/news/latest", "tag": "fintech"},
-    {"name": "TechCabal", "url": "https://techcabal.com/", "tag": "fintech"},
-    {"name": "Premium Times", "url": "https://www.premiumtimesng.com/news/top-news", "tag": "news"}
-]
+def save_json(path, data):
+    """Save JSON with pretty formatting and UTF-8 encoding."""
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
-def paraphrase_summary(text):
-    # Optional: use a simple shuffle or sentence extraction to avoid plagiarism
-    sentences = text.split(".")
-    random.shuffle(sentences)
-    return ". ".join(sentences[:2]) + "..."
+def main():
+    # Load existing blog posts
+    existing_posts = load_json(BLOGDATA_PATH)
 
-def fetch_posts(source_list, max_posts):
-    posts = []
-    for source in source_list:
-        try:
-            res = requests.get(source["url"], timeout=10)
-            soup = BeautifulSoup(res.text, "html.parser")
-            
-            # Generic article extraction; tweak per site if needed
-            articles = soup.select("article, .post, .listing .row, .news-item")[:max_posts]
-            for art in articles:
-                title_tag = art.find(["h2", "h3"])
-                if not title_tag:
-                    continue
-                title = title_tag.get_text(strip=True)
-                link = art.find("a")["href"] if art.find("a") else "#"
-                summary_tag = art.find("p")
-                summary = paraphrase_summary(summary_tag.get_text(strip=True)) if summary_tag else title
-                thumb_tag = art.find("img")
-                thumbnail = thumb_tag["src"] if thumb_tag else "https://via.placeholder.com/600x400"
-                
-                if link.startswith("/"):
-                    link = source["url"].rstrip("/") + link
-                
-                posts.append({
-                    "title": title,
-                    "date": datetime.now().strftime("%Y-%m-%d"),
-                    "author": "CurrenSync.vip",
-                    "slug": link,
-                    "summary": summary,
-                    "thumbnail": thumbnail,
-                    "tags": [source["tag"], "Nigeria"]
-                })
-        except Exception as e:
-            print(f"Error fetching {source['name']}: {e}")
-    return posts
+    # Load fresh posts to add (from bot or manually dropped file)
+    fresh_posts = load_json(NEW_POSTS_PATH)
 
-celeb_posts = fetch_posts(CELEB_SOURCES, max_posts=8)
-fintech_posts = fetch_posts(FINTECH_SOURCES, max_posts=2)
+    if not fresh_posts:
+        print("✅ No new posts found, blogdata.json left unchanged.")
+        return
 
-all_posts = celeb_posts + fintech_posts
-random.shuffle(all_posts)
-all_posts = all_posts[:NUM_POSTS]
+    # Find the highest numbered post in existing posts
+    highest_num = 0
+    for post in existing_posts:
+        slug = post.get("slug", "")
+        if slug.startswith("blog/post") and slug.endswith(".html"):
+            try:
+                num = int(slug.replace("blog/post", "").replace(".html", ""))
+                if num > highest_num:
+                    highest_num = num
+            except ValueError:
+                pass
 
-with open(JSON_FILE, "w", encoding="utf-8") as f:
-    json.dump(all_posts, f, ensure_ascii=False, indent=2)
+    # Assign new slugs sequentially starting from highest number
+    new_posts_with_slugs = []
+    for i, post in enumerate(fresh_posts, start=1):
+        next_num = highest_num + i
+        post["slug"] = f"blog/post{next_num}.html"
+        if "date" not in post:
+            post["date"] = datetime.now().strftime("%Y-%m-%d")
+        new_posts_with_slugs.append(post)
 
-print(f"{len(all_posts)} posts written to {JSON_FILE}")
+    # Merge (new posts go first)
+    updated_posts = new_posts_with_slugs + existing_posts
+
+    # Save back to blogdata.json
+    save_json(BLOGDATA_PATH, updated_posts)
+    print(f"✅ Added {len(new_posts_with_slugs)} new posts to {BLOGDATA_PATH}")
+
+    # Optionally, clear new_posts.json so we don't re-add them
+    save_json(NEW_POSTS_PATH, [])
+
+if __name__ == "__main__":
+    main()
