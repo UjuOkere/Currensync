@@ -27,12 +27,11 @@ jobs:
       - name: Run bot script
         run: python bot.py
 
-      
-- name: Commit & Push updated blogdata.json and posts
+
+      - name: Commit & Push updated blogdata.json and posts
   run: |
     git config user.name "github-actions[bot]"
     git config user.email "github-actions[bot]@users.noreply.github.com"
-    git add blogdata.json blog/*.html
+    git add blogdata.json "blog/"*.html || echo "No new HTML files to add"
     git diff --cached --quiet || git commit -m "Auto-update blog posts"
     git push
-  continue-on-error: true
