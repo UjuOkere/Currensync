@@ -14,14 +14,16 @@ os.makedirs(POSTS_FOLDER, exist_ok=True)
 # Sources
 SOURCES = {
     "BellaNaija": "https://www.bellanaija.com/entertainment/",
-    "Naijaloaded": "https://www.naijaloaded.com.ng/entertainment",
+    "LindaIkeji": "https://www.lindaikejisblog.com/",
+    "Gistlover": "https://www.gistlover.com/",
+    "Nairaland": "https://www.nairaland.com/entertainment",
 }
 
 # -------- SCRAPERS -------- #
 def fetch_bellanaija():
     posts = []
     try:
-        r = requests.get(SOURCES["BellaNaija"], timeout=10)
+        r = requests.get(SOURCES["BellaNaija"], timeout=15)
         soup = BeautifulSoup(r.text, "html.parser")
         articles = soup.select("h3.entry-title a")[:5]
         for a in articles:
@@ -34,20 +36,51 @@ def fetch_bellanaija():
         print("BellaNaija error:", e)
     return posts
 
-def fetch_naijaloaded():
+def fetch_lindaikeji():
     posts = []
     try:
-        r = requests.get(SOURCES["Naijaloaded"], timeout=10)
+        r = requests.get(SOURCES["LindaIkeji"], timeout=15)
         soup = BeautifulSoup(r.text, "html.parser")
-        articles = soup.select("h2.post-title a")[:5]
+        articles = soup.select("h2.post-title.entry-title a")[:5]
         for a in articles:
             title = a.get_text(strip=True)
             link = a["href"]
             img_tag = soup.find("img")
-            img = img_tag["src"] if img_tag else "https://via.placeholder.com/600x400?text=Naijaloaded"
+            img = img_tag["src"] if img_tag else "https://via.placeholder.com/600x400?text=LindaIkeji"
             posts.append({"title": title, "url": link, "thumbnail": img})
     except Exception as e:
-        print("Naijaloaded error:", e)
+        print("Linda Ikeji error:", e)
+    return posts
+
+def fetch_gistlover():
+    posts = []
+    try:
+        r = requests.get(SOURCES["Gistlover"], timeout=15)
+        soup = BeautifulSoup(r.text, "html.parser")
+        articles = soup.select("h3.entry-title.td-module-title a")[:5]
+        for a in articles:
+            title = a.get_text(strip=True)
+            link = a["href"]
+            img_tag = soup.find("img")
+            img = img_tag["src"] if img_tag else "https://via.placeholder.com/600x400?text=Gistlover"
+            posts.append({"title": title, "url": link, "thumbnail": img})
+    except Exception as e:
+        print("Gistlover error:", e)
+    return posts
+
+def fetch_nairaland():
+    posts = []
+    try:
+        r = requests.get(SOURCES["Nairaland"], timeout=15)
+        soup = BeautifulSoup(r.text, "html.parser")
+        articles = soup.select("td td b a")[:5]  # Nairaland structure
+        for a in articles:
+            title = a.get_text(strip=True)
+            link = "https://www.nairaland.com" + a["href"]
+            img = "https://via.placeholder.com/600x400?text=Nairaland"
+            posts.append({"title": title, "url": link, "thumbnail": img})
+    except Exception as e:
+        print("Nairaland error:", e)
     return posts
 
 # -------- UTILITIES -------- #
@@ -72,23 +105,67 @@ def create_post_html(post_number, title, content, img, tags):
         f.write(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
-  <meta name="description" content="{title}">
-  <meta name="keywords" content="{', '.join(tags)}">
-  <link rel="stylesheet" href="../styles.css">
-  <!-- AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451" crossorigin="anonymous"></script>
+  <meta name="description" content="{title}" />
+  <meta name="author" content="CurrenSync.vip" />
+  <link rel="canonical" href="https://currensync.vip/blog/post{post_number}.html" />
+
+  <!-- AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451"
+    crossorigin="anonymous"></script>
+
+  <style>
+    body {{
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: auto;
+    }}
+    h1 {{ color: #0c2d57; }}
+    .ads {{ margin: 2rem 0; text-align: center; }}
+    a {{ color: #0c2d57; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+  </style>
 </head>
+
 <body>
-  <article>
-    <h1>{title}</h1>
-    <img src="{img}" alt="{title}" style="width:100%; border-radius:10px;">
-    <p>{content}</p>
-  </article>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6539693262305451" data-ad-slot="8720273670" data-ad-format="auto"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+  <h1>{title}</h1>
+  <p><em>By CurrenSync.vip | Updated {datetime.utcnow().strftime("%B %Y")}</em></p>
+
+  <!-- 📢 AdSense Ad Block Top -->
+  <div class="ads">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6539693262305451"
+         data-ad-slot="8720273670"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+  </div>
+
+  <img src="{img}" alt="{title}" style="width:100%; border-radius:10px;">
+
+  <p>{content}</p>
+
+  <!-- 📢 Mid-Content Ad Block -->
+  <div class="ads">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6539693262305451"
+         data-ad-slot="8720273670"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+  </div>
+
+  <footer style="margin-top: 3rem; font-size: 0.9rem; text-align: center;">
+    &copy; 2025 CurrenSync.vip — Smarter Currency, Smarter Travel
+  </footer>
 </body>
 </html>""")
 
@@ -97,8 +174,15 @@ def main():
     blogdata = load_blogdata()
     today = datetime.utcnow().strftime("%Y-%m-%d")
 
-    new_posts = fetch_bellanaija() + fetch_naijaloaded()
-    new_posts = new_posts[:10]  # max 10/day
+    # Collect posts from all sites
+    new_posts = []
+    new_posts.extend(fetch_bellanaija())
+    new_posts.extend(fetch_lindaikeji())
+    new_posts.extend(fetch_gistlover())
+    new_posts.extend(fetch_nairaland())
+
+    # Limit daily new posts
+    new_posts = new_posts[:10]
 
     for post in new_posts:
         # prevent duplicates
@@ -128,7 +212,7 @@ def main():
         blogdata.insert(0, blog_entry)
 
     save_blogdata(blogdata)
-    print(f"Added {len(new_posts)} posts.")
+    print(f"✅ Added {len(new_posts)} new posts")
 
 if __name__ == "__main__":
     main()
