@@ -4,14 +4,14 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from urllib.parse import urljoin
 
 # ----------------------------
 # Blog & File Config
 # ----------------------------
-BLOG_FOLDER = "blog"
-DATA_FILE = os.path.join(BLOG_FOLDER, "blogdata
-
-BACKUP_FOLDER = os.path.join(BLOG_FOLDER, "backups")
+BLOG_FOLDER = os.path.join("blog", "posts")   # HTML posts live here
+DATA_FILE = "blogdata.json"                   # JSON tracker stays at root
+BACKUP_FOLDER = os.path.join("blog", "backups")
 
 # scraping limits
 MAX_PER_SOURCE = 2    # max posts per source per run
@@ -25,7 +25,7 @@ SOURCES = {
     "Nairaland": "https://www.nairaland.com/entertainment"
 }
 
-# Post HTML template (uses the look you provided)
+# Post HTML template
 POST_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +34,7 @@ POST_TEMPLATE = """<!DOCTYPE html>
   <title>{title}</title>
   <meta name="description" content="{summary}" />
   <meta name="author" content="CurrenSync.vip" />
-  <link rel="canonical" href="https://currensync.vip/blog/{filename}" />
+  <link rel="canonical" href="https://currensync.vip/blog/posts/{filename}" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6539693262305451" crossorigin="anonymous"></script>
   <style>
     body {{
@@ -115,19 +115,19 @@ def atomic_write_json(path, data):
     os.replace(tmp, path)
 
 def load_blogdata():
-    """Load blogdata.json safely. If corrupted, backup and return [] (so bot can proceed)."""
+    """Load blogdata.json safely. If corrupted, reset to [] so bot can proceed."""
     if not os.path.exists(DATA_FILE):
         return []
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
         if not isinstance(data, list):
-            print("⚠️ blogdata.json is not a list — backing up and resetting to empty list.")
+            print("⚠️ blogdata.json is not a list — backing up and resetting.")
             backup_file(DATA_FILE)
             return []
         return data
     except json.JSONDecodeError as e:
-        print(f"⚠️ blogdata.json JSON decode error: {e} — backing up and resetting.")
+        print(f"⚠️ blogdata.json JSON decode error: {e}")
         backup_file(DATA_FILE)
         return []
     except Exception as e:
@@ -146,7 +146,7 @@ def save_blogdata(data):
         print(f"❌ Failed to write blogdata.json: {e}")
 
 def get_last_post_number():
-    """Return highest postN.html in blog folder (0 if none)."""
+    """Return highest postN.html in blog/posts (0 if none)."""
     try:
         files = os.listdir(BLOG_FOLDER)
     except FileNotFoundError:
@@ -178,20 +178,12 @@ def absolute_url(base, link):
     return urljoin(base, link)
 
 def find_image_from_page(url):
-    """Try to get og:image or first <img> from the article page."""
     soup = fetch_soup(url)
     if not soup:
         return None
-    # og:image
     og = soup.find("meta", property="og:image")
     if og and og.get("content"):
         return og["content"]
-    # first in-content image
-    img = soup.find("article")
-    if img:
-        first = img.find("img")
-        if first and first.get("src"):
-            return absolute_url(url, first.get("src"))
     first = soup.find("img")
     if first and first.get("src"):
         return absolute_url(url, first.get("src"))
@@ -199,30 +191,22 @@ def find_image_from_page(url):
 
 # ----------------------------
 # Per-source scraping
-# (selectors are tolerant; we only grab top N)
 # ----------------------------
 def scrape_bellanaija(base):
     out = []
     soup = fetch_soup(base)
     if not soup:
         return out
-    selectors = ["h3.entry-title a", "h2.entry-title a", "article h2 a", "a.td-module-title-link"]
-    seen = set()
-    for sel in selectors:
-        for a in soup.select(sel):
-            if len(out) >= MAX_PER_SOURCE:
-                break
-            title = a.get_text(strip=True)
-            href = absolute_url(base, a.get("href"))
-            if not href or href in seen:
-                continue
-            seen.add(href)
-            thumb = find_image_from_page(href) or f"https://via.placeholder.com/600x400.png?text=BellaNaija"
-            summary = title
-            content = f"<p>{summary}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
-            out.append({"title": title, "url": href, "author": "BellaNaija", "summary": summary, "content": content, "image": thumb, "tags": ["celebrity","gossip","Nigeria"]})
+    for a in soup.select("h3.entry-title a, h2.entry-title a"):
         if len(out) >= MAX_PER_SOURCE:
             break
+        title = a.get_text(strip=True)
+        href = absolute_url(base, a.get("href"))
+        if not href:
+            continue
+        thumb = find_image_from_page(href) or "https://via.placeholder.com/600x400.png?text=BellaNaija"
+        content = f"<p>{title}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
+        out.append({"title": title, "url": href, "author": "BellaNaija", "summary": title, "content": content, "image": thumb, "tags": ["celebrity","gossip","Nigeria"]})
     return out
 
 def scrape_lindaikeji(base):
@@ -230,23 +214,16 @@ def scrape_lindaikeji(base):
     soup = fetch_soup(base)
     if not soup:
         return out
-    selectors = ["h3.post-title a", "h2.post-title a", "h3.entry-title a"]
-    seen = set()
-    for sel in selectors:
-        for a in soup.select(sel):
-            if len(out) >= MAX_PER_SOURCE:
-                break
-            title = a.get_text(strip=True)
-            href = absolute_url(base, a.get("href"))
-            if not href or href in seen:
-                continue
-            seen.add(href)
-            thumb = find_image_from_page(href) or f"https://via.placeholder.com/600x400.png?text=LindaIkeji"
-            summary = title
-            content = f"<p>{summary}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
-            out.append({"title": title, "url": href, "author": "LindaIkeji", "summary": summary, "content": content, "image": thumb, "tags": ["celebrity","gossip","Nigeria"]})
+    for a in soup.select("h3.post-title a, h2.post-title a"):
         if len(out) >= MAX_PER_SOURCE:
             break
+        title = a.get_text(strip=True)
+        href = absolute_url(base, a.get("href"))
+        if not href:
+            continue
+        thumb = find_image_from_page(href) or "https://via.placeholder.com/600x400.png?text=LindaIkeji"
+        content = f"<p>{title}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
+        out.append({"title": title, "url": href, "author": "LindaIkeji", "summary": title, "content": content, "image": thumb, "tags": ["celebrity","gossip","Nigeria"]})
     return out
 
 def scrape_gistlover(base):
@@ -254,23 +231,16 @@ def scrape_gistlover(base):
     soup = fetch_soup(base)
     if not soup:
         return out
-    selectors = ["h3.entry-title a", "h3.post-title a", "h2.entry-title a"]
-    seen = set()
-    for sel in selectors:
-        for a in soup.select(sel):
-            if len(out) >= MAX_PER_SOURCE:
-                break
-            title = a.get_text(strip=True)
-            href = absolute_url(base, a.get("href"))
-            if not href or href in seen:
-                continue
-            seen.add(href)
-            thumb = find_image_from_page(href) or f"https://via.placeholder.com/600x400.png?text=Gistlover"
-            summary = title
-            content = f"<p>{summary}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
-            out.append({"title": title, "url": href, "author": "Gistlover", "summary": summary, "content": content, "image": thumb, "tags": ["celebrity","gossip","Nigeria"]})
+    for a in soup.select("h3.entry-title a, h2.entry-title a"):
         if len(out) >= MAX_PER_SOURCE:
             break
+        title = a.get_text(strip=True)
+        href = absolute_url(base, a.get("href"))
+        if not href:
+            continue
+        thumb = find_image_from_page(href) or "https://via.placeholder.com/600x400.png?text=Gistlover"
+        content = f"<p>{title}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
+        out.append({"title": title, "url": href, "author": "Gistlover", "summary": title, "content": content, "image": thumb, "tags": ["celebrity","gossip","Nigeria"]})
     return out
 
 def scrape_nairaland(base):
@@ -278,21 +248,13 @@ def scrape_nairaland(base):
     soup = fetch_soup(base)
     if not soup:
         return out
-    # Nairaland uses many table structures; this picks relative links in the page
-    items = soup.select("td a[href^='/']")[:MAX_PER_SOURCE * 2]
-    seen = set()
+    items = soup.select("td a[href^='/']")[:MAX_PER_SOURCE]
     for a in items:
-        if len(out) >= MAX_PER_SOURCE:
-            break
         title = a.get_text(strip=True)
         href = absolute_url("https://www.nairaland.com", a.get("href"))
-        if not href or href in seen:
-            continue
-        seen.add(href)
-        thumb = f"https://via.placeholder.com/600x400.png?text=Nairaland"
-        summary = title
-        content = f"<p>{summary}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
-        out.append({"title": title, "url": href, "author": "Nairaland", "summary": summary, "content": content, "image": thumb, "tags": ["community","Nigeria"]})
+        thumb = "https://via.placeholder.com/600x400.png?text=Nairaland"
+        content = f"<p>{title}</p><p>Read more: <a href='{href}' target='_blank'>{href}</a></p>"
+        out.append({"title": title, "url": href, "author": "Nairaland", "summary": title, "content": content, "image": thumb, "tags": ["community","Nigeria"]})
     return out
 
 # ----------------------------
@@ -317,7 +279,6 @@ def create_post_file(post, number):
     return filename
 
 def escape_html(s):
-    """Minimal HTML-escape for template interpolation (keeps it simple)."""
     if not isinstance(s, str):
         return s
     return (s.replace("&", "&amp;")
@@ -335,35 +296,14 @@ def main():
     print(f"Last detected post number: {last_num}")
 
     existing = load_blogdata()
-    existing_urls = set()
-    for e in existing:
-        if isinstance(e, dict):
-            if e.get("source_url"):
-                existing_urls.add(e["source_url"])
-            elif e.get("slug"):
-                # older manual entries may not have source_url; use title as fallback key
-                existing_urls.add(e.get("title",""))
+    existing_urls = {e.get("source_url") for e in existing if isinstance(e, dict) and e.get("source_url")}
 
     scraped = []
-    # gather from each source
-    try:
-        scraped.extend(scrape_bellanaija(SOURCES["BellaNaija"]))
-    except Exception as e:
-        print("BellaNaija scrape error:", e)
-    try:
-        scraped.extend(scrape_lindaikeji(SOURCES["LindaIkeji"]))
-    except Exception as e:
-        print("LindaIkeji scrape error:", e)
-    try:
-        scraped.extend(scrape_gistlover(SOURCES["Gistlover"]))
-    except Exception as e:
-        print("Gistlover scrape error:", e)
-    try:
-        scraped.extend(scrape_nairaland(SOURCES["Nairaland"]))
-    except Exception as e:
-        print("Nairaland scrape error:", e)
+    scraped.extend(scrape_bellanaija(SOURCES["BellaNaija"]))
+    scraped.extend(scrape_lindaikeji(SOURCES["LindaIkeji"]))
+    scraped.extend(scrape_gistlover(SOURCES["Gistlover"]))
+    scraped.extend(scrape_nairaland(SOURCES["Nairaland"]))
 
-    # dedupe scraped by url + title
     unique = []
     seen = set()
     for p in scraped:
@@ -371,7 +311,6 @@ def main():
         if not key:
             continue
         if key in seen or key in existing_urls:
-            print(f"Skipping duplicate (already exists): {key}")
             continue
         seen.add(key)
         unique.append(p)
@@ -382,7 +321,6 @@ def main():
         print("No new unique items scraped. Exiting.")
         return
 
-    # create files and build new blogdata entries
     new_entries = []
     for i, post in enumerate(unique, start=1):
         new_num = last_num + i
@@ -391,7 +329,7 @@ def main():
             "title": post["title"],
             "date": post.get("date", datetime.utcnow().strftime("%Y-%m-%d")),
             "author": post.get("author", "CurrenSync.vip"),
-            "slug": f"blog/{filename}",
+            "slug": f"blog/posts/{filename}",
             "source_url": post.get("url"),
             "summary": post.get("summary", ""),
             "thumbnail": post.get("image", ""),
@@ -399,7 +337,6 @@ def main():
         }
         new_entries.append(entry)
 
-    # prepend new entries so newest appear first
     combined = new_entries + existing
     save_blogdata(combined)
     print(f"✅ Added {len(new_entries)} new posts to blogdata.json and created HTML files.")
