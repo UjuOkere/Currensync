@@ -4,7 +4,7 @@ on:
   schedule:
     # Runs twice a day: 8 AM and 2 PM UTC
     - cron: '0 8,14 * * *'
-  workflow_dispatch:  # Manual trigger for testing
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   update-blog:
@@ -30,6 +30,7 @@ jobs:
           git reset --hard origin/main
 
       - name: Run blog bot
+        id: runbot
         run: |
           echo "Running bot.py..."
           python bot.py
@@ -41,10 +42,15 @@ jobs:
           echo "Checking root folder for blogdata.json..."
           ls -l blogdata.json
 
+      - name: Check if new posts were added
+        id: checkposts
+        run: |
+          git diff --exit-code --quiet blogdata.json blog/posts/post*.html || exit 0
+          echo "No new posts were added by bot.py"
+          exit 1  # Fail workflow explicitly
+
       - name: Commit & Push updated blogdata.json and posts
+        if: success()  # Only run if changes exist
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add blogdata.json blog/posts/post*.html
-          git diff --cached --quiet || git commit -m "Auto-update blog posts"
-          git push origin HEAD:main
+          git config user
