@@ -2,9 +2,9 @@ name: Auto Update Blog
 
 on:
   schedule:
-    # Runs twice a day at 8 AM and 2 PM UTC
+    # Runs twice a day: 8 AM and 2 PM UTC
     - cron: '0 8,14 * * *'
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch:  # Manual trigger for testing
 
 jobs:
   update-blog:
@@ -24,13 +24,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 lxml
 
-      - name: Run bot script
+      - name: Pull latest changes
+        run: |
+          git fetch --all
+          git reset --hard origin/main
+
+      # ---------------------------
+      # DIAGNOSTIC STEP
+      # ---------------------------
+      - name: Run Diagnostic Bot
+        run: |
+          echo "🔍 Running environment diagnostics..."
+          python diagnose_bot.py
+
+      # ---------------------------
+      # MAIN BLOG BOT
+      # ---------------------------
+      - name: Run Blog Bot
         run: python bot.py
 
-      - name: Commit & Push changes
+      - name: Commit & Push updated blogdata.json and posts
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add blogdata.json blog/posts/*.html
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add blogdata.json blog/posts/post*.html
           git diff --cached --quiet || git commit -m "Auto-update blog posts"
           git push origin HEAD:main
