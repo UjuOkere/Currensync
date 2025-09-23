@@ -1,17 +1,16 @@
-# bot.py - Safe auto-scraper + incremental post writer for CurrenSync
 import os
 import re
 import json
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from urllib.parse import urljoin
 
 # ----------------------------
-# Configuration
+# Blog & File Config
 # ----------------------------
 BLOG_FOLDER = "blog"
-DATA_FILE = os.path.join(BLOG_FOLDER, "blogdata.json")
+DATA_FILE = os.path.join(BLOG_FOLDER, "blogdata
+
 BACKUP_FOLDER = os.path.join(BLOG_FOLDER, "backups")
 
 # scraping limits
