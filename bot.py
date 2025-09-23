@@ -66,17 +66,15 @@ def get_last_post_number():
     return max(numbers) if numbers else 0
 
 def load_blogdata():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            try:
-                return json.load(f)
-            except json.JSONDecodeError:
-                return []
+    if os.path.exists(BLOGDATA_PATH):
+        with open(BLOGDATA_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
     return []
 
 def save_blogdata(data):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    with open(BLOGDATA_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+a
 
 def fetch_site(url):
     """Fetch a page and return soup."""
