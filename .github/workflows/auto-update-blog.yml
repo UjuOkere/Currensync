@@ -29,19 +29,17 @@ jobs:
           git fetch --all
           git reset --hard origin/main
 
-      # ---------------------------
-      # DIAGNOSTIC STEP
-      # ---------------------------
-      - name: Run Diagnostic Bot
+      - name: Run blog bot
         run: |
-          echo "🔍 Running environment diagnostics..."
-          python diagnose_bot.py
+          echo "Running bot.py..."
+          python bot.py
 
-      # ---------------------------
-      # MAIN BLOG BOT
-      # ---------------------------
-      - name: Run Blog Bot
-        run: python bot.py
+      - name: List files for debugging
+        run: |
+          echo "Checking blog folder structure..."
+          ls -R blog
+          echo "Checking root folder for blogdata.json..."
+          ls -l blogdata.json
 
       - name: Commit & Push updated blogdata.json and posts
         run: |
