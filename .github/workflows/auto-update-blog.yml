@@ -2,7 +2,7 @@ name: Auto Update Blog
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # every 6 hours
+    - cron: '0 * * * *'   # Runs every hour; adjust as needed
   workflow_dispatch:
 
 jobs:
@@ -10,32 +10,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
+      # 2. Set up Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 lxml
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 lxml
 
-    - name: Run blog scraper bot
-      run: |
-        python bot.py
+      # 4. Diagnostics before running bot
+      - name: List root & blog folders
+        run: |
+          echo "Root files:"
+          ls -l
+          echo "Blog folder:"
+          ls -l blog
+          echo "Blog posts folder:"
+          ls -l blog/posts
+          echo "Backups folder:"
+          ls -l blog/backups
 
-    - name: Configure Git
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "actions@github.com"
+      # 5. Run bot
+      - name: Run bot.py
+        run: python bot.py
 
-    - name: Add & commit new posts and blogdata
-      run: |
-        git add blog/*.html blogdata.json
-        git add blog/backups/* || echo "⚠️ No backup files to add"
-        git status
-        git commit -m "Auto-update blog posts and blogdata" || echo "⚠️ Nothing to commit"
-        git push
+      # 6. Diagnostics after running bot
+      - name: List blog posts and JSON
+        run: |
+          echo "Blog posts folder after bot run:"
+          ls -l blog/posts
+          echo "blogdata.json in root:"
+          ls -l blogdata.json
+
+      # 7. Commit new posts and blogdata.json
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add blog/posts/*.html blogdata.json
+          git diff --cached --exit-code || git commit -m "Auto-update blog posts and JSON"
+          git push
