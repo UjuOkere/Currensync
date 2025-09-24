@@ -24,7 +24,7 @@ jobs:
           pip install requests beautifulsoup4 lxml
 
       - name: Run bot
-        run: python Currensync/bot.py
+        run: python bot.py   # ✅ fixed path
 
       # -------------------
       # Diagnostics section
