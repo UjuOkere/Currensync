@@ -1,62 +1,75 @@
 name: Auto Update Blog
 
 on:
-  schedule:
-    - cron: '0 * * * *'   # Runs every hour; adjust as needed
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # daily at midnight UTC
 
 jobs:
   update-blog:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          persist-credentials: true
 
-      # 2. Set up Python
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.11
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 lxml
 
-      # 4. Diagnostics before running bot
-      - name: List root & blog folders
+      - name: Run Blog Bot with Diagnostics
         run: |
-          echo "Root files:"
-          ls -l
-          echo "Blog folder:"
-          ls -l blog
-          echo "Blog posts folder:"
-          ls -l blog/posts
-          echo "Backups folder:"
-          ls -l blog/backups
+          python - <<EOF
+          import bot
 
-      # 5. Run bot
-      - name: Run bot.py
+          print("🔹 Ensuring directories exist")
+          bot.ensure_dirs()
+
+          sources = bot.SOURCES
+          existing = bot.load_blogdata()
+          existing_urls = {e.get("source_url") for e in existing if e.get("source_url")}
+
+          total_unique = 0
+
+          for name, url in sources.items():
+              # Adjust BellaNaija to main homepage
+              if name == "BellaNaija":
+                  url = "https://www.bellanaija.com"
+
+              try:
+                  scraped = bot.scrape_source(
+                      url,
+                      "h3.entry-title a, h2.entry-title a",
+                      f"https://via.placeholder.com/600x400.png?text={name}",
+                      name
+                  )
+                  print(f"{name}: Found {len(scraped)} posts")
+                  if not scraped:
+                      print(f"⚠️ Warning: {name} returned no posts")
+                  unique = [p for p in scraped if p.get("url") not in existing_urls]
+                  print(f"{name}: Unique new posts: {len(unique)}")
+                  for p in unique:
+                      print(f"  - {p.get('title')} | {p.get('url')}")
+                  total_unique += len(unique)
+              except Exception as e:
+                  print(f"❌ Error scraping {name}: {e}")
+
+          print(f"Total unique new posts across all sources: {total_unique}")
+          EOF
+
+      - name: Run the Blog Bot to write HTML and update JSON
         run: python bot.py
 
-      # 6. Diagnostics after running bot
-      - name: List blog posts and JSON
-        run: |
-          echo "Blog posts folder after bot run:"
-          ls -l blog/posts
-          echo "blogdata.json in root:"
-          ls -l blogdata.json
-
-      # 7. Commit new posts and blogdata.json
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add blog/posts/*.html blogdata.json
-          git diff --cached --exit-code || git commit -m "Auto-update blog posts and JSON"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blog/post*.html blogdata.json
+          git commit -m "Auto-update blog posts and JSON" || echo "No changes to commit"
           git push
