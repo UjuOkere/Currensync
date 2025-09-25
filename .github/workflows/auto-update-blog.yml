@@ -21,19 +21,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 lxml
+          pip install requests beautifulsoup4 lxml feedparser
 
       - name: Run bot
-        run: python bot.py   # ✅ fixed path
+        run: python bot.py
 
-      # -------------------
-      # Diagnostics section
-      # -------------------
+      # Diagnostics
       - name: List repo structure
         run: ls -R
-
-      - name: Show latest git status
-        run: git status
 
       - name: Show last 20 lines of blogdata.json
         if: success()
@@ -47,11 +42,9 @@ jobs:
       - name: Count blog posts
         run: |
           echo "Number of posts in blog folder:"
-          ls blog/*.html 2>/dev/null | wc -l || echo "No posts found"
+          ls blog/post*.html 2>/dev/null | wc -l || echo "No posts found"
 
-      # -------------------
       # Commit changes
-      # -------------------
       - name: Commit changes
         run: |
           git config --global user.name "github-actions[bot]"
