@@ -26,9 +26,14 @@ jobs:
       - name: Run bot
         run: python bot.py
 
+      # -------------------
       # Diagnostics
+      # -------------------
       - name: List repo structure
         run: ls -R
+
+      - name: Show git status
+        run: git status
 
       - name: Show last 20 lines of blogdata.json
         if: success()
@@ -42,9 +47,11 @@ jobs:
       - name: Count blog posts
         run: |
           echo "Number of posts in blog folder:"
-          ls blog/post*.html 2>/dev/null | wc -l || echo "No posts found"
+          ls blog/*.html 2>/dev/null | wc -l || echo "No posts found"
 
+      # -------------------
       # Commit changes
+      # -------------------
       - name: Commit changes
         run: |
           git config --global user.name "github-actions[bot]"
