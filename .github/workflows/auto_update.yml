@@ -24,13 +24,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install feedparser
 
-      - name: Run bot
-        run: python bot.py
-
       - name: Pull latest changes to avoid push conflicts
         run: |
           git fetch origin main
           git reset --hard origin/main
+
+      - name: Run bot
+        run: python bot.py
 
       - name: Commit and push changes
         env:
@@ -38,6 +38,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add blogdata.json blog/
+          git add blogdata.json
           git commit -m "Auto-update blog posts via RSS" || echo "No changes to commit"
-          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
+          git push https://x-access-token:${
