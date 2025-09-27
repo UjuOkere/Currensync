@@ -2,8 +2,8 @@ name: Auto Update Blog
 
 on:
   schedule:
-    # Runs twice a day: 8 AM and 8 PM UTC
-    - cron: "0 8,20 * * *"
+    # Runs twice a day: 8 AM and 2 PM UTC
+    - cron: "0 8,14 * * *"
   workflow_dispatch: # allow manual trigger
 
 jobs:
@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # important for pulling with history
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -35,13 +33,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Stage & commit changes first
-          git add blogdata.json posts/ || true
+          git add blogdata.json blog/post*.html
           git commit -m "Auto-update blog posts via RSS" || echo "No changes to commit"
-
-          # Now safely pull with rebase to sync with remote
-          git pull --rebase origin main
-
-          # Push updates
           git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
