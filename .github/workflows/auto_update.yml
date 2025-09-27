@@ -36,12 +36,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Make sure we have the latest main branch
+          # Stage any new/changed files before rebasing
+          git add blogdata.json posts/ || true
+
+          # Sync with remote branch
           git fetch origin main
           git rebase origin/main || git rebase --abort
 
-          # Stage and commit changes
-          git add blogdata.json posts/
+          # Commit (if there are changes)
           git commit -m "Auto-update blog posts via RSS" || echo "No changes to commit"
 
           # Push updates
