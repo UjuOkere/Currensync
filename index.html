@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CurrenSync Blog</title>
+  <meta name="description" content="CurrenSync VIP Blog – Latest News, Fintech Trends, Celebrity Updates, and Hot Gist.">
+  <link rel="canonical" href="https://currensync.vip/">
+  <meta property="og:title" content="CurrenSync Blog">
+  <meta property="og:description" content="Stay updated with the latest fintech news, celebrity trends, and lifestyle tips.">
+  <meta property="og:url" content="https://currensync.vip/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CurrenSync Blog">
+  <meta name="twitter:description" content="Stay updated with the latest fintech news, celebrity trends, and lifestyle tips.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff; }
+    header { background: red; color: white; text-align: center; padding: 10px 0; font-weight: bold; font-size: 1.5rem; }
+    nav { background: #111; color: white; display: flex; justify-content: center; gap: 15px; padding: 8px 0; flex-wrap: wrap; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; padding: 10px; max-width: 1200px; margin: auto; }
+    main { flex: 3; min-width: 280px; }
+    aside { flex: 1; min-width: 250px; background: #f5f5f5; padding: 10px; border-radius: 10px; }
+    .post { background: white; margin-bottom: 20px; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .post img { width: 100%; border-radius: 10px; margin-top: 10px; }
+    .post h2 { margin-top: 0; }
+    hr { border: 0; height: 1px; background: #ddd; margin: 25px 0; }
+    .recent-slider { display: flex; overflow-x: auto; gap: 10px; padding: 10px; margin-bottom: 15px; }
+    .recent-post { flex: 0 0 auto; width: 200px; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .recent-post h4 { margin: 5px 0; font-size: 14px; }
+    .recent-post img { width: 100%; border-radius: 8px; margin-top: 5px; }
+    .search-box { margin-bottom: 15px; }
+    .search-box input { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tags span { background: #eee; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; }
+    .pagination { display: flex; justify-content: center; margin: 20px 0; gap: 10px; }
+    .pagination button { padding: 6px 12px; border: none; background: red; color: white; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    CurrenSync Blog – Hot Gist & Fintech
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Celebrity</a>
+    <a href="#">Fintech</a>
+    <a href="#">Lifestyle</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <!-- Recent Posts Slider -->
+  <div class="recent-slider" id="recent-slider"></div>
+
+  <div class="container">
+    <main id="blog-posts"></main>
+
+    <aside>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search posts...">
+      </div>
+      <h3>Tags</h3>
+      <div class="tags" id="tagList"></div>
+      <h3>Advertisement</h3>
+      <div>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6539693262305451"
+             data-ad-slot="8720273670"
+             data-ad-format="auto"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" id="pagination"></div>
+
+  <script>
+    let posts = [];
+    let currentPage = 1;
+    const postsPerPage = 8;
+
+    async function loadPosts() {
+      const response = await fetch('blogdata.json');
+      posts = await response.json();
+      renderPosts();
+      renderTags();
+      renderRecent();
+    }
+
+    function renderPosts(filtered = posts) {
+      const blogPosts = document.getElementById('blog-posts');
+      blogPosts.innerHTML = "";
+      const start = (currentPage - 1) * postsPerPage;
+      const end = start + postsPerPage;
+      const paginated = filtered.slice(start, end);
+
+      paginated.forEach(post => {
+        const div = document.createElement('div');
+        div.className = "post";
+        div.innerHTML = `
+          <h2><a href="${post.slug}">${post.title}</a></h2>
+          <img src="${post.image}" alt="${post.title}">
+          <p><small>${post.date} • ${post.author}</small></p>
+          <p>${post.summary}</p>
+        `;
+        blogPosts.appendChild(div);
+        blogPosts.appendChild(document.createElement('hr'));
+      });
+
+      renderPagination(filtered.length);
+    }
+
+    function renderPagination(totalPosts) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = "";
+      const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.onclick = () => { currentPage = i; renderPosts(); };
+        if (i === currentPage) btn.style.background = "#444";
+        pagination.appendChild(btn);
+      }
+    }
+
+    function renderTags() {
+      const tagList = document.getElementById('tagList');
+      const uniqueTags = [...new Set(posts.flatMap(p => p.tags))];
+      uniqueTags.forEach(tag => {
+        const span = document.createElement('span');
+        span.textContent = tag;
+        span.onclick = () => {
+          const filtered = posts.filter(p => p.tags.includes(tag));
+          renderPosts(filtered);
+        };
+        tagList.appendChild(span);
+      });
+    }
+
+    function renderRecent() {
+      const recentSlider = document.getElementById('recent-slider');
+      recentSlider.innerHTML = "";
+      const recent = posts.slice(0, 6);
+
+      recent.forEach(post => {
+        const div = document.createElement('div');
+        div.className = "recent-post";
+        div.innerHTML = `
+          <h4><a href="${post.slug}">${post.title}</a></h4>
+          <img src="${post.image}" alt="${post.title}">
+        `;
+        recentSlider.appendChild(div);
+      });
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+      const keyword = e.target.value.toLowerCase();
+      const filtered = posts.filter(post =>
+        post.title.toLowerCase().includes(keyword) ||
+        post.summary.toLowerCase().includes(keyword)
+      );
+      renderPosts(filtered);
+    });
+
+    loadPosts();
+  </script>
+</body>
+</html>
